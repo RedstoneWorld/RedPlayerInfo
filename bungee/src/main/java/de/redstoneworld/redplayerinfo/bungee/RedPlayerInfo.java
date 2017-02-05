@@ -3,6 +3,7 @@ package de.redstoneworld.redplayerinfo.bungee;
 import de.redstoneworld.redplayerinfo.bungee.commands.RedAfkCommand;
 import de.redstoneworld.redplayerinfo.bungee.commands.RedPlayerInfoCommand;
 import de.redstoneworld.redplayerinfo.bungee.commands.RedWhosAfkCommand;
+import de.themoep.bungeeplugin.BungeePlugin;
 
 public final class RedPlayerInfo extends BungeePlugin {
 

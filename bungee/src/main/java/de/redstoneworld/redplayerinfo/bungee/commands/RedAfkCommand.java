@@ -1,6 +1,7 @@
 package de.redstoneworld.redplayerinfo.bungee.commands;
 
-import de.redstoneworld.redplayerinfo.bungee.BungeePlugin;
+import de.themoep.bungeeplugin.BungeePlugin;
+import de.themoep.bungeeplugin.PluginCommand;
 import net.md_5.bungee.api.CommandSender;
 
 public class RedAfkCommand extends PluginCommand {
