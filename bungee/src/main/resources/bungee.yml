@@ -1,0 +1,30 @@
+name: ${project.name}
+version: '${minecraft.plugin.version}'
+main: de.redstoneworld.redplayerinfo.bungee.RedPlayerInfo
+author: Phoenix616
+commands:
+   redplayerinfo:
+      aliases: [playerinfo]
+      description: Get infos about a player
+      usage: /<command> <name|uuid>
+      permission: rwm.playerinfo.getinfos
+      permission-message: You don't have the permission <permission>
+   redafk:
+      aliases: [afk]
+      description: Allow a player to set himself afk
+      usage: /<command> [<reason>]
+      permission: rwm.redafk.afk-use
+      permission-message: You don't have the permission <permission>
+   redwhosafk:
+      aliases: [whosafk]
+      description: Get who is afk
+      usage: /<command>
+      permission: rwm.redafk.afk-use
+      permission-message: You don't have the permission <permission>
+permissions:
+   rwm.playerinfo.getinfos:
+      description: Gives permission to use the /playerinfo command
+   rwm.redafk.afk-use:
+      description: Gives permission to use the /afk and /whosafk commands and see the broadcast
+   rwm.redafk.afk-immune:
+      description: Immune against auto afk

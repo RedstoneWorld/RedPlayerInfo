@@ -1,0 +1,62 @@
+playerinfo:
+  head: '\n&8------------------- [&6Player&fInfo&8] -------------------\n'
+  info: '&6letzter Name: %playername%\n&6UUID: %playeruuid%'
+  status:
+    online: '\n&6Status:\n  &2Online &f(seit <dd.mm.jjjj, hh:mm Uhr>)'
+    offline: '\n&6Status:\n  &4Offline &f(seit <dd.mm.jjjj, hh:mm Uhr>)'
+    afk: '  &aafk &f<dd.mm.jjjj, hh:mm Uhr>)'
+    not-afk: '  &anicht afk'
+  extra: '\n\n&c> %plots%\n&c> %head%\n&c> %moreinfo%\n'
+  actions:
+    playername:
+      text: '&7%playername%'
+      click-event:
+        action: 'run_command'
+        value: '%playername%'
+      hover-event:
+        show_text: '&7Auswählen!'
+    playeruuid:
+      text: '&f%playeruuid%'
+      click-event:
+        action: 'run_command'
+        value: '%playeruuid%'
+      hover-event:
+        show_text: '&7Auswählen!'
+    plots:
+      text: '&7Parzellen auflisten!'
+      click-event:
+        action: 'run_command'
+        value: '/p list %sendername% %playername%'
+      hover-event:
+        show_text: '&7Befehl Auswählen!'
+    head:
+      text: '&7Kopf erhalten!'
+      click-event:
+        action: 'run_command'
+        value: '/head %playername%'
+      hover-event:
+        show_text: '&7Befehl Auswählen!'
+    moreinfo:
+      text: '&7Weitere Informationen erhalten!'
+      click-event:
+        action: 'open_url'
+        value: 'https://namemc.com/profile/%playeruuid%'
+      hover-event:
+        show_text: '&7https://namemc.com/profile/%playeruuid% öffnen!'
+messages:
+  public_broadcast: true
+  is-afk: '&c[-] &f%player% &7ist gerade &fabwesend&7. %reason%'
+  reason: '&8(%message%)'
+  no-afk: '&a[+] &f%player% &7ist wieder &fanwesend&7.'
+  auto-warning: '&8[&4Red&fAFK&8]&f: Bist du noch anwesend? &2Bewege dich kurz, damit der Server es erkennt!'
+  public-return: '&a[+] &f%player% &7ist auf dem &fServer &7wieder anwesend!'
+  no-permissions: '&cDu darfst diese Funktion nicht nutzen!'
+  syntax-error: '...'
+afk-time: 3
+auto-warning:
+  enabled: true
+  time: 2
+custom-placeholder:
+  afk-style:
+    OFF: ""
+    ON: "&u"
