@@ -1,6 +1,5 @@
 package de.redstoneworld.redplayerinfo.bungee.commands;
 
-import de.redstoneworld.redplayerinfo.bungee.RedPlayer;
 import de.redstoneworld.redplayerinfo.bungee.RedPlayerInfo;
 import de.themoep.bungeeplugin.BungeePlugin;
 import de.themoep.bungeeplugin.PluginCommand;
@@ -21,34 +20,16 @@ public class RedAfkCommand extends PluginCommand {
             return true;
         }
 
-        RedPlayer player = ((RedPlayerInfo) plugin).getPlayer((ProxiedPlayer) sender);
-        if (args.length == 0 && player.isAfk()) {
-            player.unsetAfk();
-            if (plugin.getConfig().getBoolean("messages.public-broadcast")) {
-                plugin.broadcast(getPermission(), plugin.getConfig().getString("messages.no-afk"), "player", player.getName());
-            } else {
-                sender.sendMessage(plugin.translate(plugin.getConfig().getString("messages.unset-afk")));
-            }
+        if (args.length == 0 && ((RedPlayerInfo) plugin).unsetAfk((ProxiedPlayer) sender)) {
+            return true;
         } else if (args.length > 0){
             StringBuilder reason = new StringBuilder(args[0]);
             for(int i = 1; i < args.length; i++) {
                 reason.append(" ").append(args[i]);
             }
-            player.setAfk(reason.toString());
-            if (plugin.getConfig().getBoolean("messages.public-broadcast")) {
-                plugin.broadcast(getPermission(), plugin.getConfig().getString("messages.is-afk"),
-                        "player", player.getName(),
-                        "reason", plugin.translate(plugin.getConfig().getString("messages.reason"), "message", reason.toString())
-                );
-            } else {
-                sender.sendMessage(plugin.translate(plugin.getConfig().getString("messages.set-afk"),
-                        "reason", plugin.translate(plugin.getConfig().getString("messages.reason"), "message", reason.toString()))
-                );
-            }
-        } else {
-            return false;
+            ((RedPlayerInfo) plugin).setAfk((ProxiedPlayer) sender, reason.toString());
+            return true;
         }
-        ((RedPlayerInfo) plugin).getStorage().savePlayer(player);
-        return true;
+        return false;
     }
 }

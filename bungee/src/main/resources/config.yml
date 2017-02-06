@@ -59,10 +59,13 @@ messages:
   no-afk: '&a[+] &f%player% &7ist wieder &fanwesend&7.'
   unset-afk: '&7Du bist nichtmehr &fabwesend&7.'
   auto-warning: '&8[&4Red&fAFK&8]&f: Bist du noch anwesend? &2Bewege dich kurz, damit der Server es erkennt!'
+  auto-afk: 'Inaktiv'
   no-permissions: '&cDu darfst diese Funktion nicht nutzen!'
   syntax-error: '...'
   whos-afk: '&fAbwesend: &f%players'
-afk-time: 3
+auto-afk:
+  enabled: true
+  time: 3
 auto-warning:
   enabled: true
   time: 2
