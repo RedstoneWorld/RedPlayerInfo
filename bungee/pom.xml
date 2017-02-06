@@ -5,13 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>bungee</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <version>${plugin.version}</version>
 
     <parent>
         <groupId>de.redstoneworld.redplayerinfo</groupId>
-        <artifactId>redplayerinfo</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <artifactId>parent</artifactId>
+        <version>parent</version>
     </parent>
 
     <repositories>
@@ -36,6 +35,18 @@
             <groupId>de.themoep</groupId>
             <artifactId>bungeeplugin</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>2.5.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-jdk14</artifactId>
+            <version>1.7.21</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

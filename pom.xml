@@ -5,18 +5,20 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>de.redstoneworld.redplayerinfo</groupId>
-    <artifactId>redplayerinfo</artifactId>
-    <version>1.0-SNAPSHOT</version>
-
-    <name>RedPlayerInfo</name>
+    <artifactId>parent</artifactId>
+    <version>parent</version>
+    <packaging>pom</packaging>
 
     <modules>
         <module>bungee</module>
+        <module>plugin</module>
     </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <minecraft.plugin.version>${project.version} ${buildDescription}</minecraft.plugin.version>
+        <plugin.name>RedPlayerInfo</plugin.name>
+        <plugin.version>1.0-SNAPSHOT</plugin.version>
+        <minecraft.plugin.version>${plugin.version} ${buildDescription}</minecraft.plugin.version>
     </properties>
 
     <profiles>
@@ -47,7 +49,6 @@
     </profiles>
 
     <build>
-        <finalName>${project.name}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -62,15 +63,18 @@
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>2.4.3</version>
                 <configuration>
-                    <artifactSet>
-                        <includes>
-                            <include>de.themoep:*</include>
-                        </includes>
-                    </artifactSet>
                     <relocations>
                         <relocation>
                             <pattern>de.themoep.bungeeplugin</pattern>
                             <shadedPattern>de.redstoneworld.redplayerinfo.bungee</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.slf4j</pattern>
+                            <shadedPattern>de.redstoneworld.redplayerinfo.lib.slf4j</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.zaxxer.hikari</pattern>
+                            <shadedPattern>de.redstoneworld.redplayerinfo.lib.hikari</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>

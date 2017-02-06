@@ -1,4 +1,4 @@
-name: ${project.name}
+name: ${plugin.name}
 version: '${minecraft.plugin.version}'
 main: de.redstoneworld.redplayerinfo.bungee.RedPlayerInfo
 author: Phoenix616
