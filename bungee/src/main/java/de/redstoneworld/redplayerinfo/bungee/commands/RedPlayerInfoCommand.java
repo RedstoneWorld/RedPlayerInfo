@@ -34,9 +34,12 @@ public class RedPlayerInfoCommand extends PluginCommand {
             return false;
         }
 
-        if ("--reload".equalsIgnoreCase(args[0]) || "-r".equals(args[0])) {
-            ((RedPlayerInfo) plugin).load();
-            sender.sendMessage(ChatColor.YELLOW + "Plugin reloaded.");
+        if (sender.hasPermission("rwm.playerinfo.reload") && "--reload".equalsIgnoreCase(args[0]) || "-r".equals(args[0])) {
+            if (((RedPlayerInfo) plugin).load()) {
+                sender.sendMessage(ChatColor.GREEN + "Plugin reloaded.");
+            } else {
+                sender.sendMessage(ChatColor.RED + "Error while reloading! Take a look at the console!");
+            }
             return true;
         }
 

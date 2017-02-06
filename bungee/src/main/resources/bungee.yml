@@ -25,6 +25,8 @@ commands:
 permissions:
    rwm.playerinfo.getinfos:
       description: Gives permission to use the /playerinfo command
+   rwm.playerinfo.reload:
+      description: Gives permission to reload the plugin with /playerinfo --reload
    rwm.redafk.afk-use:
       description: Gives permission to use the /afk and /whosafk commands and see the broadcast
    rwm.redafk.afk-immune:
