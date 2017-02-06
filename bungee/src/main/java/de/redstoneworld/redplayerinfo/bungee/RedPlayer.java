@@ -58,7 +58,7 @@ public class RedPlayer {
     }
 
     public boolean isAfk() {
-        return afkMessage != null && !afkMessage.isEmpty();
+        return afkMessage != null;
     }
 
     public boolean isOnline() {

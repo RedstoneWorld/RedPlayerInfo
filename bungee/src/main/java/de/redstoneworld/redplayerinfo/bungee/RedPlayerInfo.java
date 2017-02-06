@@ -8,6 +8,7 @@ import de.redstoneworld.redplayerinfo.bungee.storages.CachedStorage;
 import de.redstoneworld.redplayerinfo.bungee.storages.MysqlStorage;
 import de.redstoneworld.redplayerinfo.bungee.storages.PlayerInfoStorage;
 import de.themoep.bungeeplugin.BungeePlugin;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -34,5 +35,18 @@ public final class RedPlayerInfo extends BungeePlugin {
 
     public PlayerInfoStorage getStorage() {
         return storage;
+    }
+
+    /**
+     * Get the RedPlayer object from a ProxiedPlayer
+     * @param player    The proxied player
+     * @return          The RedPlayer object from the storage or a new one
+     */
+    public RedPlayer getPlayer(ProxiedPlayer player) {
+        RedPlayer redPlayer = getStorage().getPlayer(player.getUniqueId());
+        if (redPlayer == null) {
+            redPlayer = new RedPlayer(player);
+        }
+        return redPlayer;
     }
 }
