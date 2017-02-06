@@ -1,5 +1,6 @@
 package de.redstoneworld.redplayerinfo.bungee;
 
+import codecrafter47.bungeetablistplus.api.bungee.BungeeTabListPlusAPI;
 import de.redstoneworld.redplayerinfo.bungee.commands.RedAfkCommand;
 import de.redstoneworld.redplayerinfo.bungee.commands.RedPlayerInfoCommand;
 import de.redstoneworld.redplayerinfo.bungee.commands.RedWhosAfkCommand;
@@ -32,6 +33,10 @@ public final class RedPlayerInfo extends BungeePlugin {
         } catch (SQLException e) {
             getLogger().log(Level.SEVERE, "Error while initializing MySQL storage. Using only the cache now.", e);
             storage = new CachedStorage(this);
+        }
+
+        if (getProxy().getPluginManager().getPlugin("BungeeTabListPlus") != null) {
+            BungeeTabListPlusAPI.registerVariable(this, new AfkPlaceholderVariable(this));
         }
     }
 
