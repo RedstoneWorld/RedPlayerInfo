@@ -10,6 +10,7 @@ public class RedPlayer {
     private final String name;
     private long loginTime = -1;
     private long logoutTime = -1;
+    private long afkTime = -1;
     private String afkMessage;
 
     public RedPlayer(ProxiedPlayer player) {
@@ -45,15 +46,21 @@ public class RedPlayer {
         this.logoutTime = logoutTime;
     }
 
+    public long getAfkTime() {
+        return afkTime;
+    }
+
     public String getAfkMessage() {
         return afkMessage;
     }
 
     public void setAfk(String afkMessage) {
+        afkTime = System.currentTimeMillis();
         this.afkMessage = afkMessage;
     }
 
     public void unsetAfk() {
+        afkTime = -1;
         this.afkMessage = null;
     }
 

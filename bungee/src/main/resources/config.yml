@@ -7,12 +7,13 @@ mysql:
   port: 3306
   tableprefix: rpi_
 playerinfo:
+  datetime-format: 'dd.mm.jjjj, hh:mm'
   head: '\n&8------------------- [&6Player&fInfo&8] -------------------\n'
   info: '&6letzter Name: %playername%\n&6UUID: %playeruuid%'
   status:
-    online: '\n&6Status:\n  &2Online &f(seit <dd.mm.jjjj, hh:mm Uhr>)'
-    offline: '\n&6Status:\n  &4Offline &f(seit <dd.mm.jjjj, hh:mm Uhr>)'
-    afk: '  &aafk &f<dd.mm.jjjj, hh:mm Uhr>)'
+    online: '\n&6Status:\n  &2Online &f(seit %datetime% Uhr)'
+    offline: '\n&6Status:\n  &4Offline &f(seit %datetime% Uhr)'
+    afk: '  &aafk, %reason% &f(seit %datetime% Uhr)'
     not-afk: '  &anicht afk'
   extra: '\n\n&c> %plots%\n&c> %head%\n&c> %moreinfo%\n'
   actions:
@@ -22,35 +23,40 @@ playerinfo:
         action: 'run_command'
         value: '%playername%'
       hover-event:
-        show_text: '&7Auswählen!'
+        action: 'show_text'
+        value: '&7Auswählen!'
     playeruuid:
       text: '&f%playeruuid%'
       click-event:
         action: 'run_command'
         value: '%playeruuid%'
       hover-event:
-        show_text: '&7Auswählen!'
+        action: 'show_text'
+        value: '&7Auswählen!'
     plots:
       text: '&7Parzellen auflisten!'
       click-event:
         action: 'run_command'
         value: '/p list %sendername% %playername%'
       hover-event:
-        show_text: '&7Befehl Auswählen!'
+        action: 'show_text'
+        value: '&7Befehl Auswählen!'
     head:
       text: '&7Kopf erhalten!'
       click-event:
         action: 'run_command'
         value: '/head %playername%'
       hover-event:
-        show_text: '&7Befehl Auswählen!'
+        action: 'show_text'
+        value: '&7Befehl Auswählen!'
     moreinfo:
       text: '&7Weitere Informationen erhalten!'
       click-event:
         action: 'open_url'
         value: 'https://namemc.com/profile/%playeruuid%'
       hover-event:
-        show_text: '&7https://namemc.com/profile/%playeruuid% öffnen!'
+        action: 'show_text'
+        value: '&7https://namemc.com/profile/%playeruuid% öffnen!'
 messages:
   public_broadcast: true
   is-afk: '&c[-] &f%player% &7ist gerade &fabwesend&7. %reason%'
@@ -63,6 +69,7 @@ messages:
   no-permissions: '&cDu darfst diese Funktion nicht nutzen!'
   syntax-error: '...'
   whos-afk: '&fAbwesend: &f%players'
+  unknown-player: '&cSpieler %input% wurde nicht gefunden!'
 auto-afk:
   enabled: true
   time: 3

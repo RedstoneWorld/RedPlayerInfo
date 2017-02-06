@@ -27,6 +27,7 @@ public class PlayerListener implements Listener {
         RedPlayer player = plugin.getStorage().getPlayer(event.getPlayer().getUniqueId());
         if (player != null) {
             player.setLogoutTime(System.currentTimeMillis());
+            player.unsetAfk();
             plugin.getStorage().savePlayer(player);
         }
     }
