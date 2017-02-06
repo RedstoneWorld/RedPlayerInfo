@@ -13,6 +13,7 @@ import de.themoep.bungeeplugin.BungeePlugin;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.sql.SQLException;
+import java.io.IOException;
 import java.util.logging.Level;
 
 
