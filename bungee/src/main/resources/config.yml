@@ -61,6 +61,7 @@ messages:
   auto-warning: '&8[&4Red&fAFK&8]&f: Bist du noch anwesend? &2Bewege dich kurz, damit der Server es erkennt!'
   no-permissions: '&cDu darfst diese Funktion nicht nutzen!'
   syntax-error: '...'
+  whos-afk: '&fAbwesend: &f%players'
 afk-time: 3
 auto-warning:
   enabled: true
