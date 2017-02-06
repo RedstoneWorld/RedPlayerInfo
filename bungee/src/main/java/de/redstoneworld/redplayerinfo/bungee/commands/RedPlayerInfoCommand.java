@@ -4,6 +4,7 @@ import de.redstoneworld.redplayerinfo.bungee.RedPlayer;
 import de.redstoneworld.redplayerinfo.bungee.RedPlayerInfo;
 import de.themoep.bungeeplugin.BungeePlugin;
 import de.themoep.bungeeplugin.PluginCommand;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -31,6 +32,12 @@ public class RedPlayerInfoCommand extends PluginCommand {
     protected boolean run(CommandSender sender, String[] args) {
         if (args.length == 0) {
             return false;
+        }
+
+        if ("--reload".equalsIgnoreCase(args[0]) || "-r".equals(args[0])) {
+            ((RedPlayerInfo) plugin).load();
+            sender.sendMessage(ChatColor.YELLOW + "Plugin reloaded.");
+            return true;
         }
 
         plugin.getProxy().getScheduler().runAsync(plugin, () -> {

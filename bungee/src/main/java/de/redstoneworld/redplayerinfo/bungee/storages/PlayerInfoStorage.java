@@ -25,4 +25,9 @@ public interface PlayerInfoStorage {
      * @return The player's RedPlayer object or null if he is unknown
      */
     public RedPlayer getPlayer(UUID playerId);
+
+    /**
+     * Called when the plugin is stopped or reloaded
+     */
+    void destroy();
 }

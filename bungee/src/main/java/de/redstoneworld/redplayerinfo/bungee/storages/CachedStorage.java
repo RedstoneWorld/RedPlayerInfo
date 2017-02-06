@@ -37,6 +37,12 @@ public class CachedStorage implements PlayerInfoStorage {
         return idCache.getIfPresent(playerId);
     }
 
+    @Override
+    public void destroy() {
+        idCache = null;
+        nameCache = null;
+    }
+
     public RedPlayer getPlayer(String playerName, Callable<RedPlayer> nameCacheLoader) {
         try {
             return nameCache.get(playerName, nameCacheLoader);

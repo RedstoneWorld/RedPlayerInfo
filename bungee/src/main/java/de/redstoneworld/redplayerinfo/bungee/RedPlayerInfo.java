@@ -28,15 +28,29 @@ public final class RedPlayerInfo extends BungeePlugin {
         getProxy().registerChannel(getDescription().getName());
         getProxy().getPluginManager().registerListener(this, new PlayerListener(this));
         getProxy().getPluginManager().registerListener(this, new PluginMessageListener(this));
+
+        if (getProxy().getPluginManager().getPlugin("BungeeTabListPlus") != null) {
+            BungeeTabListPlusAPI.registerVariable(this, new AfkPlaceholderVariable(this));
+        }
+    }
+
+    @Override
+    public void onDisable() {
+        if (storage != null) {
+            storage.destroy();
+        }
+    }
+
+    public void load() {
+        getConfig().loadConfig();
+        if (storage != null) {
+            storage.destroy();
+        }
         try {
             storage = new MysqlStorage(this);
         } catch (SQLException e) {
             getLogger().log(Level.SEVERE, "Error while initializing MySQL storage. Using only the cache now.", e);
             storage = new CachedStorage(this);
-        }
-
-        if (getProxy().getPluginManager().getPlugin("BungeeTabListPlus") != null) {
-            BungeeTabListPlusAPI.registerVariable(this, new AfkPlaceholderVariable(this));
         }
     }
 

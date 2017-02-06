@@ -105,4 +105,10 @@ public class MysqlStorage implements PlayerInfoStorage {
             throw new Exception("No Player with the UUID " + playerId + " found!");
         });
     }
+
+    @Override
+    public void destroy() {
+        cache.destroy();
+        ds.close();
+    }
 }

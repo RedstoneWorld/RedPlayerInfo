@@ -7,7 +7,7 @@ commands:
    redplayerinfo:
       aliases: [playerinfo]
       description: Get infos about a player
-      usage: /<command> <name|uuid>
+      usage: /<command> <name|uuid>|[--reload]
       permission: rwm.playerinfo.getinfos
       permission-message: You don't have the permission <permission>
    redafk:
