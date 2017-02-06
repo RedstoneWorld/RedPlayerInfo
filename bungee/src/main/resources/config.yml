@@ -1,3 +1,11 @@
+cache-size: 1000
+mysql:
+  user: username
+  pass: password1
+  dbname: mydatabase
+  host: localhost
+  port: 3306
+  tableprefix: rpi_
 playerinfo:
   head: '\n&8------------------- [&6Player&fInfo&8] -------------------\n'
   info: '&6letzter Name: %playername%\n&6UUID: %playeruuid%'
