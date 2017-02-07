@@ -13,8 +13,10 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.config.Configuration;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.regex.Matcher;
@@ -57,11 +59,15 @@ public class RedPlayerInfoCommand extends PluginCommand {
             }
 
             if (player == null) {
-                sender.sendMessage(plugin.translate(plugin.getConfig().getString("messages.unknown-player"), "input", input));
+                sender.sendMessage(BungeePlugin.translate(plugin.getConfig().getString("messages.unknown-player"), "input", input));
                 return;
             }
 
-            new PlayerInfoBuilder(sender, player).build().send();
+            try {
+                new PlayerInfoBuilder(sender, player).build().send();
+            } catch (IllegalArgumentException e) {
+                sender.sendMessage(ChatColor.RED + "Error while building the info string! " + e.getMessage());
+            }
         });
 
         return true;
@@ -73,10 +79,12 @@ public class RedPlayerInfoCommand extends PluginCommand {
         private final RedPlayer player;
 
         private final List<BaseComponent[]> components = new ArrayList<>();
+        private final SimpleDateFormat timeFormat;
 
-        public PlayerInfoBuilder(CommandSender sender, RedPlayer player) {
+        public PlayerInfoBuilder(CommandSender sender, RedPlayer player) throws IllegalArgumentException {
             this.sender = sender;
             this.player = player;
+            this.timeFormat = new SimpleDateFormat(plugin.getConfig().getString("playerinfo.datetime-format"));
         }
 
         private PlayerInfoBuilder build() {
@@ -157,11 +165,18 @@ public class RedPlayerInfoCommand extends PluginCommand {
         }
 
         private String addInfo(String message) {
-            return plugin.translate(message,
+            return BungeePlugin.translate(message,
                     "sendername", sender.getName(),
                     "playername", player.getName(),
-                    "playeruuid", player.getUniqueId().toString()
+                    "playeruuid", player.getUniqueId().toString(),
+                    "logintime", formatTime(player.getLoginTime()),
+                    "logouttime", formatTime(player.getLogoutTime()),
+                    "afktime", formatTime(player.getAfkTime())
             );
+        }
+
+        private String formatTime(long timeStamp) {
+            return timeFormat.format(new Date(timeStamp));
         }
 
         private List<String> getVariables(String message) {

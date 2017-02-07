@@ -7,13 +7,14 @@ mysql:
   port: 3306
   tableprefix: rpi_
 playerinfo:
-  datetime-format: 'dd.mm.jjjj, hh:mm'
+  # SimpleDateFormat: https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html
+  datetime-format: 'dd.MM.yyyy, HH:mm'
   head: '\n&8------------------- [&6Player&fInfo&8] -------------------\n'
   info: '&6letzter Name: %playername%\n&6UUID: %playeruuid%'
   status:
-    online: '\n&6Status:\n  &2Online &f(seit %datetime% Uhr)'
-    offline: '\n&6Status:\n  &4Offline &f(seit %datetime% Uhr)'
-    afk: '  &aafk, %reason% &f(seit %datetime% Uhr)'
+    online: '\n&6Status:\n  &2Online &f(seit %logintime% Uhr)'
+    offline: '\n&6Status:\n  &4Offline &f(seit %logouttime% Uhr)'
+    afk: '  &aafk, %reason% &f(seit %afktime% Uhr)'
     not-afk: '  &anicht afk'
   extra: '\n\n&c> %plots%\n&c> %head%\n&c> %moreinfo%\n'
   actions:
@@ -58,7 +59,7 @@ playerinfo:
         action: 'show_text'
         value: '&7https://namemc.com/profile/%playeruuid% öffnen!'
 messages:
-  public_broadcast: true
+  public-broadcast: true
   is-afk: '&c[-] &f%player% &7ist gerade &fabwesend&7. %reason%'
   set-afk: '&7Du bist nun &fabwesend&7. %reason%'
   reason: '&8(%message%)'
