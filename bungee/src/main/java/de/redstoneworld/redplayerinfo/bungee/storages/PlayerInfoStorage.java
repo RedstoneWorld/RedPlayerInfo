@@ -2,6 +2,7 @@ package de.redstoneworld.redplayerinfo.bungee.storages;
 
 import de.redstoneworld.redplayerinfo.bungee.RedPlayer;
 
+import java.util.Collection;
 import java.util.UUID;
 
 public interface PlayerInfoStorage {
@@ -30,4 +31,10 @@ public interface PlayerInfoStorage {
      * Called when the plugin is stopped or reloaded
      */
     void destroy();
+
+    /**
+     * Get all cached players
+     * @return  A Collection of RedPlayers that are in the current cache
+     */
+    Collection<RedPlayer> getCachedPlayers();
 }

@@ -14,6 +14,8 @@ import de.themoep.bungeeplugin.BungeePlugin;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Level;
 
 
@@ -49,13 +51,16 @@ public final class RedPlayerInfo extends BungeePlugin {
     }
 
     public boolean load() {
+        boolean error = false;
         try {
             getConfig().loadConfig();
         } catch (IOException e) {
             getLogger().log(Level.SEVERE, "Error while loading the config file!", e);
-            return false;
+            error = true;
         }
+        Set<RedPlayer> currentPlayers = new HashSet<>();
         if (storage != null) {
+            currentPlayers.addAll(storage.getCachedPlayers());
             storage.destroy();
         }
         try {
@@ -63,9 +68,12 @@ public final class RedPlayerInfo extends BungeePlugin {
         } catch (Exception e) {
             getLogger().log(Level.SEVERE, "Error while initializing MySQL storage. Using only the cache now. (" + e.getMessage() + ")");
             storage = new CachedStorage(this);
-            return false;
+            error = true;
         }
-        return true;
+        for (RedPlayer player : currentPlayers) {
+            storage.savePlayer(player);
+        }
+        return !error;
     }
 
 

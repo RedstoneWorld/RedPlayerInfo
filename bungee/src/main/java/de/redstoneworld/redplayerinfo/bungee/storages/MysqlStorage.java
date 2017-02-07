@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Collection;
 import java.util.UUID;
 import java.util.logging.Level;
 
@@ -111,5 +112,10 @@ public class MysqlStorage implements PlayerInfoStorage {
     public void destroy() {
         cache.destroy();
         ds.close();
+    }
+
+    @Override
+    public Collection<RedPlayer> getCachedPlayers() {
+        return cache.getCachedPlayers();
     }
 }

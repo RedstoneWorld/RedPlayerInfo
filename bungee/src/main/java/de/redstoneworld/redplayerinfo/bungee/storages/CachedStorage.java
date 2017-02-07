@@ -5,6 +5,7 @@ import com.google.common.cache.CacheBuilder;
 import de.redstoneworld.redplayerinfo.bungee.RedPlayer;
 import de.themoep.bungeeplugin.BungeePlugin;
 
+import java.util.Collection;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -41,6 +42,11 @@ public class CachedStorage implements PlayerInfoStorage {
     public void destroy() {
         idCache = null;
         nameCache = null;
+    }
+
+    @Override
+    public Collection<RedPlayer> getCachedPlayers() {
+        return idCache.asMap().values();
     }
 
     public RedPlayer getPlayer(String playerName, Callable<RedPlayer> nameCacheLoader) {
