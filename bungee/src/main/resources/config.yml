@@ -9,16 +9,16 @@ mysql:
 playerinfo:
   # SimpleDateFormat: https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html
   datetime-format: 'dd.MM.yyyy, HH:mm'
-  head: '\n&8------------------- [&6Player&fInfo&8] -------------------\n'
-  info: '&6letzter Name: %playername%\n&6UUID: %playeruuid%'
+  head: "\n&8------------------- [&6Player&fInfo&8] -------------------\n"
+  info: "&6letzter Name: %playernameaction%\n&6UUID: %playeruuidaction%"
   status:
-    online: '\n&6Status:\n  &2Online &f(seit %logintime% Uhr)'
-    offline: '\n&6Status:\n  &4Offline &f(seit %logouttime% Uhr)'
-    afk: '  &aafk, %reason% &f(seit %afktime% Uhr)'
-    not-afk: '  &anicht afk'
-  extra: '\n\n&c> %plots%\n&c> %head%\n&c> %moreinfo%\n'
+    online: "\n&6Status:\n  &2Online &f(seit %logintime% Uhr)"
+    offline: "\n&6Status:\n  &4Offline &f(seit %logouttime% Uhr)"
+    afk: "  &cafk, &7%afkreason% &f(seit %afktime% Uhr)"
+    not-afk: "  &anicht afk"
+  extra: "\n\n&c> %plots%\n&c> %head%\n&c> %moreinfo%\n "
   actions:
-    playername:
+    playernameaction:
       text: '&7%playername%'
       click-event:
         action: 'run_command'
@@ -26,7 +26,7 @@ playerinfo:
       hover-event:
         action: 'show_text'
         value: '&7Auswählen!'
-    playeruuid:
+    playeruuidaction:
       text: '&f%playeruuid%'
       click-event:
         action: 'run_command'

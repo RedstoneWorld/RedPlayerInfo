@@ -51,7 +51,7 @@ public class RedPlayer {
     }
 
     public String getAfkMessage() {
-        return afkMessage;
+        return isAfk() ? afkMessage : "";
     }
 
     public void setAfk(String afkMessage) {

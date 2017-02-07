@@ -19,12 +19,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class RedPlayerInfoCommand extends PluginCommand {
-
-    private final Pattern varPattern = Pattern.compile("%(\\w+)%");
 
     public RedPlayerInfoCommand(BungeePlugin plugin, String name, String permission, String permissionMessage, String description, String usage, String... aliases) {
         super(plugin, name, permission, permissionMessage, description, usage, aliases);
@@ -105,7 +101,7 @@ public class RedPlayerInfoCommand extends PluginCommand {
         }
 
         private List<BaseComponent[]> createComponents(String key) {
-            String[] lines = plugin.getConfig().getString("playerinfo." + key).split("\\n");
+            String[] lines = plugin.getConfig().getString("playerinfo." + key).split("\n");
             List<BaseComponent[]> components = new ArrayList<>();
             for (String line : lines) {
                 components.add(translate(line));
@@ -171,7 +167,8 @@ public class RedPlayerInfoCommand extends PluginCommand {
                     "playeruuid", player.getUniqueId().toString(),
                     "logintime", formatTime(player.getLoginTime()),
                     "logouttime", formatTime(player.getLogoutTime()),
-                    "afktime", formatTime(player.getAfkTime())
+                    "afktime", formatTime(player.getAfkTime()),
+                    "afkreason", player.getAfkMessage()
             );
         }
 
@@ -180,11 +177,22 @@ public class RedPlayerInfoCommand extends PluginCommand {
         }
 
         private List<String> getVariables(String message) {
-            Matcher matcher = varPattern.matcher(message);
             List<String> variables = new ArrayList<>();
-            if (matcher.matches()) {
-                for (int i = 1; i < matcher.groupCount(); i++) {
-                    variables.add(matcher.group(i));
+            StringBuilder currentVar = null;
+            boolean escaped = false;
+            for (char c : message.toCharArray()) {
+                if (!escaped && c == '%') {
+                    if (currentVar == null) {
+                         currentVar = new StringBuilder();
+                    } else {
+                        variables.add(currentVar.toString());
+                        currentVar = null;
+                    }
+                } else if (c == '\\') {
+                    escaped = true;
+                } else if (c != ' ' && currentVar != null) {
+                    currentVar.append(c);
+                    escaped = false;
                 }
             }
             return variables;
