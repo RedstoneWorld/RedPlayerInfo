@@ -13,7 +13,6 @@ import de.redstoneworld.redplayerinfo.bungee.storages.PlayerInfoStorage;
 import de.themoep.bungeeplugin.BungeePlugin;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-import java.sql.SQLException;
 import java.io.IOException;
 import java.util.logging.Level;
 
@@ -61,8 +60,8 @@ public final class RedPlayerInfo extends BungeePlugin {
         }
         try {
             storage = new MysqlStorage(this);
-        } catch (SQLException e) {
-            getLogger().log(Level.SEVERE, "Error while initializing MySQL storage. Using only the cache now.", e);
+        } catch (Exception e) {
+            getLogger().log(Level.SEVERE, "Error while initializing MySQL storage. Using only the cache now. (" + e.getMessage() + ")");
             storage = new CachedStorage(this);
             return false;
         }

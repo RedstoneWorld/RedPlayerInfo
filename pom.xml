@@ -77,6 +77,10 @@
                             <pattern>com.zaxxer.hikari</pattern>
                             <shadedPattern>de.redstoneworld.redplayerinfo.lib.hikari</shadedPattern>
                         </relocation>
+                        <relocation>
+                            <pattern>org.mariadb.jdbc</pattern>
+                            <shadedPattern>de.redstoneworld.redplayerinfo.lib.mariadb</shadedPattern>
+                        </relocation>
                     </relocations>
                 </configuration>
                 <executions>

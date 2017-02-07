@@ -3,6 +3,7 @@ package de.redstoneworld.redplayerinfo.bungee.storages;
 import com.zaxxer.hikari.HikariDataSource;
 import de.redstoneworld.redplayerinfo.bungee.RedPlayer;
 import de.themoep.bungeeplugin.BungeePlugin;
+import org.mariadb.jdbc.MariaDbDataSource;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -26,11 +27,11 @@ public class MysqlStorage implements PlayerInfoStorage {
         this.tablePrefix = plugin.getConfig().getString("mysql.tableprefix");
 
         String host = plugin.getConfig().getString("mysql.host");
-        String port = plugin.getConfig().getString("mysql.port");
+        int port = plugin.getConfig().getInt("mysql.port");
         String database = plugin.getConfig().getString("mysql.database");
 
         ds = new HikariDataSource();
-        ds.setJdbcUrl("jdbc:mysql://" + host + ":" + port + "/" + database);
+        ds.setDataSource(new MariaDbDataSource(host, port, database));
         ds.setUsername(plugin.getConfig().getString("mysql.user"));
         ds.setPassword(plugin.getConfig().getString("mysql.pass"));
         ds.setConnectionTimeout(5000);
