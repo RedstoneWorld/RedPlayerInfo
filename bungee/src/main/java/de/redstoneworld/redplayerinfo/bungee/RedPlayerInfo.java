@@ -1,6 +1,7 @@
 package de.redstoneworld.redplayerinfo.bungee;
 
 import codecrafter47.bungeetablistplus.api.bungee.BungeeTabListPlusAPI;
+import codecrafter47.bungeetablistplus.api.bungee.Variable;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import de.redstoneworld.redplayerinfo.bungee.commands.RedAfkCommand;
@@ -12,6 +13,7 @@ import de.redstoneworld.redplayerinfo.bungee.storages.CachedStorage;
 import de.redstoneworld.redplayerinfo.bungee.storages.MysqlStorage;
 import de.redstoneworld.redplayerinfo.bungee.storages.PlayerInfoStorage;
 import de.themoep.bungeeplugin.BungeePlugin;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.sql.SQLException;
@@ -39,7 +41,16 @@ public final class RedPlayerInfo extends BungeePlugin {
         }
         
         if (getProxy().getPluginManager().getPlugin("BungeeTabListPlus") != null) {
-            BungeeTabListPlusAPI.registerVariable(this, new AfkPlaceholderVariable(this));
+            BungeeTabListPlusAPI.registerVariable(this, new Variable("afk") {
+                @Override
+                public String getReplacement(ProxiedPlayer player) {
+                    RedPlayer redPlayer = getPlayer(player);
+                    if (redPlayer.isAfk()) {
+                        return ChatColor.translateAlternateColorCodes('&', getConfig().getString("custom-placeholder.afk-style.ON"));
+                    }
+                    return ChatColor.translateAlternateColorCodes('&', getConfig().getString("custom-placeholder.afk-style.OFF"));
+                }
+            });
         }
     }
 
