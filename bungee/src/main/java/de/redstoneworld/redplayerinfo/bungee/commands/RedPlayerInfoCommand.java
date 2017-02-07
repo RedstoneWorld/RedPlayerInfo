@@ -50,15 +50,21 @@ public class RedPlayerInfoCommand extends PluginCommand implements TabExecutor {
                 input = input.replaceAll("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})", "$1-$2-$3-$4-$5");
             }
 
+            UUID playerId = null;
             try {
-                player = ((RedPlayerInfo) plugin).getStorage().getPlayer(UUID.fromString(input));
+                playerId = UUID.fromString(input);
+                player = ((RedPlayerInfo) plugin).getStorage().getPlayer(playerId);
             } catch (IllegalArgumentException e) {
                 player = ((RedPlayerInfo) plugin).getStorage().getPlayer(input);
             }
 
             if (player == null) {
+                if (playerId == null) {
+                    player = new RedPlayer(new UUID(0, 0), input);
+                } else {
+                    player = new RedPlayer(playerId, "Name not known.");
+                }
                 sender.sendMessage(BungeePlugin.translate(plugin.getConfig().getString("messages.unknown-player"), "input", input));
-                return;
             }
 
             try {
