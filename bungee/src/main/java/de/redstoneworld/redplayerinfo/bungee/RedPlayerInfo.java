@@ -1,6 +1,8 @@
 package de.redstoneworld.redplayerinfo.bungee;
 
 import codecrafter47.bungeetablistplus.api.bungee.BungeeTabListPlusAPI;
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 import de.redstoneworld.redplayerinfo.bungee.commands.RedAfkCommand;
 import de.redstoneworld.redplayerinfo.bungee.commands.RedPlayerInfoCommand;
 import de.redstoneworld.redplayerinfo.bungee.commands.RedWhosAfkCommand;
@@ -19,6 +21,8 @@ import java.util.logging.Level;
 
 public final class RedPlayerInfo extends BungeePlugin {
 
+    public static final String PLUGIN_MESSAGE_CHANNEL = "RedPlayerInfo";
+
     private PlayerInfoStorage storage;
 
     @Override
@@ -26,7 +30,7 @@ public final class RedPlayerInfo extends BungeePlugin {
         registerCommand("redafk", RedAfkCommand.class);
         registerCommand("redplayerinfo", RedPlayerInfoCommand.class);
         registerCommand("redwhosafk", RedWhosAfkCommand.class);
-        getProxy().registerChannel(getDescription().getName());
+        getProxy().registerChannel(PLUGIN_MESSAGE_CHANNEL);
         getProxy().getPluginManager().registerListener(this, new PlayerListener(this));
         getProxy().getPluginManager().registerListener(this, new PluginMessageListener(this));
 
@@ -104,7 +108,13 @@ public final class RedPlayerInfo extends BungeePlugin {
         return false;
     }
 
-    public void setAfk(ProxiedPlayer proxiedPlayer, String reason) {
+    /**
+     * Set a player afk
+     * @param proxiedPlayer The player to set
+     * @param reason        The reason why he is afk
+     * @param manual        Whether or not he set this status imself via the command
+     */
+    public void setAfk(ProxiedPlayer proxiedPlayer, String reason, boolean manual) {
         RedPlayer player = getPlayer(proxiedPlayer);
         player.setAfk(reason);
         if (getConfig().getBoolean("messages.public-broadcast")) {
@@ -117,6 +127,14 @@ public final class RedPlayerInfo extends BungeePlugin {
                     "reason", translate(getConfig().getString("messages.reason"), "message", reason))
             );
         }
+
+        ByteArrayDataOutput out = ByteStreams.newDataOutput();
+        out.writeUTF("setafk");
+        out.writeLong(player.getUniqueId().getMostSignificantBits());
+        out.writeLong(player.getUniqueId().getLeastSignificantBits());
+        out.writeBoolean(manual);
+        proxiedPlayer.getServer().sendData(PLUGIN_MESSAGE_CHANNEL, out.toByteArray());
+
         getStorage().savePlayer(player);
     }
 }

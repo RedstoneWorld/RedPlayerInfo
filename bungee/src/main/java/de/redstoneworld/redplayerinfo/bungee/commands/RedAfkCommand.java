@@ -27,7 +27,7 @@ public class RedAfkCommand extends PluginCommand {
             for(int i = 1; i < args.length; i++) {
                 reason.append(" ").append(args[i]);
             }
-            ((RedPlayerInfo) plugin).setAfk((ProxiedPlayer) sender, reason.toString());
+            ((RedPlayerInfo) plugin).setAfk((ProxiedPlayer) sender, reason.toString(), true);
             return true;
         }
         return false;

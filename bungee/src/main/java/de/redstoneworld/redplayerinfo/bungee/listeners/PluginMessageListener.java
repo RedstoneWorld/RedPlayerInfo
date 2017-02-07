@@ -9,6 +9,7 @@ import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
+import java.util.UUID;
 import java.util.logging.Level;
 
 public class PluginMessageListener implements Listener {
@@ -20,7 +21,7 @@ public class PluginMessageListener implements Listener {
 
     @EventHandler
     public void onPluginMessage(PluginMessageEvent event) {
-        if (!event.getTag().equals(plugin.getDescription().getName())) {
+        if (!RedPlayerInfo.PLUGIN_MESSAGE_CHANNEL.equals(event.getTag())) {
             return;
         }
 
@@ -40,13 +41,22 @@ public class PluginMessageListener implements Listener {
         String subChannel = in.readUTF();
         if ("afktime".equals(subChannel)) {
             if (plugin.getConfig().getBoolean("auto-afk.enabled")) {
-                int seconds = in.readInt();
-                RedPlayer player = plugin.getPlayer(receiver);
-                if (!player.isAfk()) {
-                    if (seconds * 60 >= plugin.getConfig().getInt("afk-time")) {
-                        plugin.setAfk(receiver, plugin.translate(plugin.getConfig().getString("messages.auto-afk")));
-                    } else if (plugin.getConfig().getBoolean("auto-warning.enabled") && seconds * 60 >= plugin.getConfig().getInt("auto-warning")) {
-                        receiver.sendMessage(plugin.translate(plugin.getConfig().getString("messages.auto-warning")));
+                int amount = in.readInt();
+                for (int i = 0; i < amount; i++) {
+                    UUID playerId = new UUID(in.readLong(), in.readLong());
+                    int seconds = in.readInt();
+
+                    RedPlayer player = plugin.getStorage().getPlayer(playerId);
+                    if (player == null) {
+                        return;
+                    }
+
+                    if (!player.isAfk()) {
+                        if (seconds >= plugin.getConfig().getInt("afk-time") * 60 ) {
+                            plugin.setAfk(receiver, plugin.translate(plugin.getConfig().getString("messages.auto-afk")), false);
+                        } else if (plugin.getConfig().getBoolean("auto-warning.enabled") && seconds >= plugin.getConfig().getInt("auto-warning") * 60 ) {
+                            receiver.sendMessage(plugin.translate(plugin.getConfig().getString("messages.auto-warning")));
+                        }
                     }
                 }
             }

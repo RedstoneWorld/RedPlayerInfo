@@ -4,33 +4,38 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>plugin</artifactId>
+    <artifactId>bukkit</artifactId>
     <version>${plugin.version}</version>
 
     <parent>
-        <artifactId>parent</artifactId>
         <groupId>de.redstoneworld.redplayerinfo</groupId>
+        <artifactId>parent</artifactId>
         <version>parent</version>
     </parent>
 
+    <repositories>
+        <repository>
+            <id>spigotmc-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
-            <groupId>de.redstoneworld.redplayerinfo</groupId>
-            <artifactId>bungee</artifactId>
-            <version>${project.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>de.redstoneworld.redplayerinfo</groupId>
+            <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>${project.version}</version>
-            <scope>compile</scope>
+            <version>1.10.2-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
     <build>
-        <finalName>${plugin.name}</finalName>
-        <directory>../target</directory>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
     </build>
 
 </project>
