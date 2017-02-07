@@ -1,5 +1,6 @@
 package de.redstoneworld.redplayerinfo.bungee;
 
+import codecrafter47.bungeetablistplus.api.bungee.BungeeTabListPlusAPI;
 import codecrafter47.bungeetablistplus.api.bungee.Variable;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -19,5 +20,9 @@ public class AfkPlaceholderVariable extends Variable {
             return ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("custom-placeholder.afk-style.ON"));
         }
         return ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("custom-placeholder.afk-style.OFF"));
+    }
+
+    public void register() {
+        BungeeTabListPlusAPI.registerVariable(plugin, this);
     }
 }

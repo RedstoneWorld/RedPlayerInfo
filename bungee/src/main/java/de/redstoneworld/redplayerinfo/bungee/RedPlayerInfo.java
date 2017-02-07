@@ -1,6 +1,5 @@
 package de.redstoneworld.redplayerinfo.bungee;
 
-import codecrafter47.bungeetablistplus.api.bungee.BungeeTabListPlusAPI;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import de.redstoneworld.redplayerinfo.bungee.commands.RedAfkCommand;
@@ -39,7 +38,7 @@ public final class RedPlayerInfo extends BungeePlugin {
         }
         
         if (getProxy().getPluginManager().getPlugin("BungeeTabListPlus") != null) {
-            BungeeTabListPlusAPI.registerVariable(this, new AfkPlaceholderVariable(this));
+            new AfkPlaceholderVariable(this).register();
         }
     }
 
