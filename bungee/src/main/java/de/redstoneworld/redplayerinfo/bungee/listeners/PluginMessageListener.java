@@ -46,16 +46,17 @@ public class PluginMessageListener implements Listener {
                     UUID playerId = new UUID(in.readLong(), in.readLong());
                     int seconds = in.readInt();
 
-                    RedPlayer player = plugin.getStorage().getPlayer(playerId);
-                    if (player == null) {
+                    ProxiedPlayer player = plugin.getProxy().getPlayer(playerId);
+                    if (player == null || player.hasPermission("rwm.redafk.afk-immune")) {
                         return;
                     }
 
-                    if (!player.isAfk()) {
+                    RedPlayer redPlayer = plugin.getPlayer(player);
+                    if (!redPlayer.isAfk()) {
                         if (seconds >= plugin.getConfig().getInt("afk-time") * 60 ) {
-                            plugin.setAfk(receiver, plugin.translate(plugin.getConfig().getString("messages.auto-afk")), false);
+                            plugin.setAfk(player, plugin.translate(plugin.getConfig().getString("messages.auto-afk")), false);
                         } else if (plugin.getConfig().getBoolean("auto-warning.enabled") && seconds >= plugin.getConfig().getInt("auto-warning") * 60 ) {
-                            receiver.sendMessage(plugin.translate(plugin.getConfig().getString("messages.auto-warning")));
+                            player.sendMessage(plugin.translate(plugin.getConfig().getString("messages.auto-warning")));
                         }
                     }
                 }
