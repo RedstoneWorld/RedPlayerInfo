@@ -11,6 +11,8 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.plugin.TabExecutor;
 import net.md_5.bungee.config.Configuration;
 
 import java.text.SimpleDateFormat;
@@ -20,7 +22,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-public class RedPlayerInfoCommand extends PluginCommand {
+public class RedPlayerInfoCommand extends PluginCommand implements TabExecutor {
 
     public RedPlayerInfoCommand(BungeePlugin plugin, String name, String permission, String permissionMessage, String description, String usage, String... aliases) {
         super(plugin, name, permission, permissionMessage, description, usage, aliases);
@@ -67,6 +69,15 @@ public class RedPlayerInfoCommand extends PluginCommand {
         });
 
         return true;
+    }
+
+    @Override
+    public Iterable<String> onTabComplete(CommandSender commandSender, String[] args) {
+        List<String> playerNames = new ArrayList<>();
+        for (ProxiedPlayer player : plugin.getProxy().getPlayers())
+            if (args.length == 0 || args.length == 1 && player.getName().startsWith(args[0]))
+                playerNames.add(player.getName());
+        return playerNames;
     }
 
 
