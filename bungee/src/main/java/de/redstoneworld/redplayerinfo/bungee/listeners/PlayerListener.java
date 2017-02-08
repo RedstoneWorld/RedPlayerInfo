@@ -4,6 +4,7 @@ import de.redstoneworld.redplayerinfo.bungee.RedPlayer;
 import de.redstoneworld.redplayerinfo.bungee.RedPlayerInfo;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
+import net.md_5.bungee.api.event.ServerSwitchEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
@@ -30,5 +31,10 @@ public class PlayerListener implements Listener {
             player.unsetAfk();
             plugin.getStorage().savePlayer(player);
         }
+    }
+
+    @EventHandler
+    public void onSwitchServer(ServerSwitchEvent event) {
+        plugin.sendAfkInfo(event.getPlayer());
     }
 }

@@ -12,6 +12,7 @@ public class RedPlayer {
     private long logoutTime = -1;
     private long afkTime = -1;
     private String afkMessage;
+    private boolean afkManually = false;
 
     public RedPlayer(ProxiedPlayer player) {
         this(player.getUniqueId(), player.getName());
@@ -54,9 +55,10 @@ public class RedPlayer {
         return isAfk() ? afkMessage : "";
     }
 
-    public void setAfk(String afkMessage) {
+    public void setAfk(String afkMessage, boolean manual) {
         afkTime = System.currentTimeMillis();
         this.afkMessage = afkMessage;
+        this.afkManually = manual;
     }
 
     public void unsetAfk() {
@@ -70,5 +72,9 @@ public class RedPlayer {
 
     public boolean isOnline() {
         return logoutTime < 0 && loginTime > 0 && loginTime <= System.currentTimeMillis();
+    }
+
+    public boolean isAutoAfk() {
+        return isAfk() && !afkManually;
     }
 }

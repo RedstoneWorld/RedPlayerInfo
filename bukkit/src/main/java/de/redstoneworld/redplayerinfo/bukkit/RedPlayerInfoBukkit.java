@@ -5,7 +5,6 @@ import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,6 +29,8 @@ public final class RedPlayerInfoBukkit extends JavaPlugin {
             String subChannel = in.readUTF();
             if ("setafk".equals(subChannel)) {
                 afkPlayers.put(new UUID(in.readLong(), in.readLong()), in.readBoolean());
+            } else if ("unsetafk".equals(subChannel)) {
+                afkPlayers.remove(new UUID(in.readLong(), in.readLong()));
             }
         });
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
