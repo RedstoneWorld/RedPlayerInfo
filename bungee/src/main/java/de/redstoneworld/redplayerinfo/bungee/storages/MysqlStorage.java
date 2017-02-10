@@ -29,7 +29,7 @@ public class MysqlStorage implements PlayerInfoStorage {
 
         String host = plugin.getConfig().getString("mysql.host");
         int port = plugin.getConfig().getInt("mysql.port");
-        String database = plugin.getConfig().getString("mysql.database");
+        String database = plugin.getConfig().getString("mysql.dbname");
 
         ds = new HikariDataSource();
         ds.setDataSource(new MariaDbDataSource(host, port, database));
