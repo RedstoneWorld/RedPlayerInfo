@@ -9,6 +9,7 @@ mysql:
 playerinfo:
   # SimpleDateFormat: https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html
   datetime-format: 'dd.MM.yyyy, HH:mm'
+  datetime-zone: 'GMT+1'
   head: "\n&8------------------- [&6Player&fInfo&8] -------------------\n"
   info: "&6letzter Name: %playernameaction%\n&6UUID: %playeruuidaction%"
   status:

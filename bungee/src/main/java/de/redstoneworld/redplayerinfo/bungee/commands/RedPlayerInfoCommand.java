@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.UUID;
 
 public class RedPlayerInfoCommand extends PluginCommand implements TabExecutor {
@@ -98,6 +99,7 @@ public class RedPlayerInfoCommand extends PluginCommand implements TabExecutor {
             this.sender = sender;
             this.player = player;
             this.timeFormat = new SimpleDateFormat(plugin.getConfig().getString("playerinfo.datetime-format"));
+            this.timeFormat.setTimeZone(TimeZone.getTimeZone(plugin.getConfig().getString("playerinfo.datetime-zone")));
         }
 
         private PlayerInfoBuilder build() {
