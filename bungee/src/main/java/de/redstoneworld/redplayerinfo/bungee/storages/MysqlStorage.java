@@ -47,7 +47,7 @@ public class MysqlStorage implements PlayerInfoStorage {
                     + "uuid VARCHAR(36), UNIQUE (uuid), "
                     + "name TINYTEXT,"
                     + "lastlogin BIGINT(11) NOT NULL,"
-                    + "lastlogout BIGINT(11) NOT NULL,"
+                    + "lastlogout BIGINT(11) NOT NULL"
                     + ") DEFAULT CHARACTER SET=utf8 AUTO_INCREMENT=1;";
 
             sta.execute(sql);
