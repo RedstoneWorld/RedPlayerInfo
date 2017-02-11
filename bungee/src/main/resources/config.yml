@@ -64,6 +64,7 @@ messages:
   is-afk: '&c[-] &f%player% &7ist gerade &fabwesend&7. %reason%'
   set-afk: '&7Du bist nun &fabwesend&7. %reason%'
   reason: '&8(%message%)'
+  afk-with-no-reason: '-'
   no-afk: '&a[+] &f%player% &7ist wieder &fanwesend&7.'
   unset-afk: '&7Du bist nichtmehr &fabwesend&7.'
   auto-warning: '&8[&4Red&fAFK&8]&f: Bist du noch anwesend? &2Bewege dich kurz, damit der Server es erkennt!'

@@ -123,6 +123,9 @@ public final class RedPlayerInfo extends BungeePlugin {
      */
     public void setAfk(ProxiedPlayer proxiedPlayer, String reason, boolean manual) {
         RedPlayer player = getPlayer(proxiedPlayer);
+        if (reason.isEmpty()) {
+            reason = getConfig().getString("messages.afk-with-no-reason");
+        }
         player.setAfk(reason, manual);
         if (getConfig().getBoolean("messages.public-broadcast")) {
             broadcast("rwm.redafk.afk-use", getConfig().getString("messages.is-afk"),

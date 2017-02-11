@@ -20,7 +20,10 @@ public class RedAfkCommand extends PluginCommand {
             return true;
         }
 
-        if (args.length == 0 && ((RedPlayerInfo) plugin).unsetAfk((ProxiedPlayer) sender)) {
+        if (args.length == 0) {
+            if (!((RedPlayerInfo) plugin).unsetAfk((ProxiedPlayer) sender)) {
+                ((RedPlayerInfo) plugin).setAfk((ProxiedPlayer) sender, "", true);
+            }
             return true;
         } else if (args.length > 0){
             StringBuilder reason = new StringBuilder(args[0]);
