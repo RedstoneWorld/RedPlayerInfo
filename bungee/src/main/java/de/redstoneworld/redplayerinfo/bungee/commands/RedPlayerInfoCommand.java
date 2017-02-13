@@ -25,8 +25,11 @@ import java.util.UUID;
 
 public class RedPlayerInfoCommand extends PluginCommand implements TabExecutor {
 
+    private final RedPlayerInfo plugin;
+
     public RedPlayerInfoCommand(BungeePlugin plugin, String name, String permission, String permissionMessage, String description, String usage, String... aliases) {
         super(plugin, name, permission, permissionMessage, description, usage, aliases);
+        this.plugin = (RedPlayerInfo) plugin;
     }
 
     @Override
@@ -36,7 +39,7 @@ public class RedPlayerInfoCommand extends PluginCommand implements TabExecutor {
         }
 
         if (sender.hasPermission("rwm.playerinfo.reload") && "--reload".equalsIgnoreCase(args[0]) || "-r".equals(args[0])) {
-            if (((RedPlayerInfo) plugin).load()) {
+            if (plugin.load()) {
                 sender.sendMessage(ChatColor.GREEN + "Plugin reloaded.");
             } else {
                 sender.sendMessage(ChatColor.RED + "Error while reloading! Take a look at the console!");
@@ -54,9 +57,9 @@ public class RedPlayerInfoCommand extends PluginCommand implements TabExecutor {
             UUID playerId = null;
             try {
                 playerId = UUID.fromString(input);
-                player = ((RedPlayerInfo) plugin).getStorage().getPlayer(playerId);
+                player = plugin.getStorage().getPlayer(playerId);
             } catch (IllegalArgumentException e) {
-                player = ((RedPlayerInfo) plugin).getStorage().getPlayer(input);
+                player = plugin.getStorage().getPlayer(input);
             }
 
             if (player == null) {
@@ -184,6 +187,9 @@ public class RedPlayerInfoCommand extends PluginCommand implements TabExecutor {
                     "sendername", sender.getName(),
                     "playername", player.getName(),
                     "playeruuid", player.getUniqueId().toString(),
+                    "playerprefix", plugin.getPrefix(player),
+                    "playersuffix", plugin.getSuffix(player),
+                    "playergroup", plugin.getGroup(player),
                     "logintime", formatTime(player.getLoginTime()),
                     "logouttime", formatTime(player.getLogoutTime()),
                     "afktime", formatTime(player.getAfkTime()),

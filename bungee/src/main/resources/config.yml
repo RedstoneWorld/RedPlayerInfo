@@ -11,7 +11,7 @@ playerinfo:
   datetime-format: 'dd.MM.yyyy, HH:mm'
   datetime-zone: 'GMT+1'
   head: "\n&8------------------- [&6Player&fInfo&8] -------------------\n"
-  info: "&6letzter Name: %playernameaction%\n&6UUID: %playeruuidaction%"
+  info: "&6letzter Name: %playerprefix%%playernameaction%%playersuffix%\n&6UUID: %playeruuidaction%"
   status:
     online: "\n&6Status:\n  &2Online &f(seit %logintime% Uhr)"
     offline: "\n&6Status:\n  &4Offline &f(seit %logouttime% Uhr)"

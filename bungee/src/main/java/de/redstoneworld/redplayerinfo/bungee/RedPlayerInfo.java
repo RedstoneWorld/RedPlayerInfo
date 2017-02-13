@@ -11,6 +11,8 @@ import de.redstoneworld.redplayerinfo.bungee.storages.CachedStorage;
 import de.redstoneworld.redplayerinfo.bungee.storages.MysqlStorage;
 import de.redstoneworld.redplayerinfo.bungee.storages.PlayerInfoStorage;
 import de.themoep.bungeeplugin.BungeePlugin;
+import net.alpenblock.bungeeperms.BungeePerms;
+import net.alpenblock.bungeeperms.User;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.io.IOException;
@@ -24,6 +26,8 @@ public final class RedPlayerInfo extends BungeePlugin {
     public static final String PLUGIN_MESSAGE_CHANNEL = "RedPlayerInfo";
 
     private PlayerInfoStorage storage;
+
+    private BungeePerms bungeePerms;
 
     @Override
     public void onEnable() {
@@ -40,6 +44,11 @@ public final class RedPlayerInfo extends BungeePlugin {
         
         if (getProxy().getPluginManager().getPlugin("BungeeTabListPlus") != null) {
             new AfkPlaceholderVariable(this).register();
+        }
+
+        if (getProxy().getPluginManager().getPlugin("BungeePerms") != null) {
+            bungeePerms = BungeePerms.getInstance();
+            getLogger().log(Level.INFO, "Detected BungeePerms " + bungeePerms.getPlugin().getVersion());
         }
     }
 
@@ -157,5 +166,35 @@ public final class RedPlayerInfo extends BungeePlugin {
             out.writeLong(player.getUniqueId().getLeastSignificantBits());
             proxiedPlayer.getServer().sendData(PLUGIN_MESSAGE_CHANNEL, out.toByteArray());
         }
+    }
+
+    public String getPrefix(RedPlayer player) {
+        if (bungeePerms != null) {
+            User user = bungeePerms.getPermissionsManager().getUser(player.getUniqueId(), true);
+            if (user != null) {
+                return user.getPrefix();
+            }
+        }
+        return "";
+    }
+
+    public String getSuffix(RedPlayer player) {
+        if (bungeePerms != null) {
+            User user = bungeePerms.getPermissionsManager().getUser(player.getUniqueId(), true);
+            if (user != null) {
+                return user.getSuffix();
+            }
+        }
+        return "";
+    }
+
+    public String getGroup(RedPlayer player) {
+        if (bungeePerms != null) {
+            User user = bungeePerms.getPermissionsManager().getUser(player.getUniqueId(), true);
+            if (user != null) {
+                return user.getGroupsString().get(0);
+            }
+        }
+        return "";
     }
 }
