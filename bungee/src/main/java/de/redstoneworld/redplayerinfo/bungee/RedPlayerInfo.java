@@ -172,7 +172,7 @@ public final class RedPlayerInfo extends BungeePlugin {
         if (bungeePerms != null) {
             User user = bungeePerms.getPermissionsManager().getUser(player.getUniqueId(), true);
             if (user != null) {
-                return user.getPrefix();
+                return user.buildPrefix();
             }
         }
         return "";
@@ -182,7 +182,7 @@ public final class RedPlayerInfo extends BungeePlugin {
         if (bungeePerms != null) {
             User user = bungeePerms.getPermissionsManager().getUser(player.getUniqueId(), true);
             if (user != null) {
-                return user.getSuffix();
+                return user.buildSuffix();
             }
         }
         return "";
