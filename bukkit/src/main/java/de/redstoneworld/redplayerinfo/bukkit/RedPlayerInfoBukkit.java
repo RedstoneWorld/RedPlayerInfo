@@ -50,16 +50,17 @@ public final class RedPlayerInfoBukkit extends JavaPlugin {
      */
     public void updateLastActivity(Player player) {
         lastActivity.put(player.getUniqueId(), System.currentTimeMillis());
-        if (isAutoAfk(player.getUniqueId())) {
+        if (isAfk(player.getUniqueId())) {
             unsetAfk(player);
         }
     }
 
     private void unsetAfk(Player player) {
-        afkPlayers.remove(player.getUniqueId());
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF("unsetafk");
+        out.writeBoolean(!isAutoAfk(player.getUniqueId()));
         player.sendPluginMessage(this, PLUGIN_MESSAGE_CHANNEL, out.toByteArray());
+        afkPlayers.remove(player.getUniqueId());
     }
 
     /**

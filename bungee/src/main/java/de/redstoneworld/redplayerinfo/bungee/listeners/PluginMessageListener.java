@@ -62,7 +62,10 @@ public class PluginMessageListener implements Listener {
                 }
             }
         } else if ("unsetafk".equals(subChannel)) {
-            plugin.unsetAfk(receiver);
+            boolean manual = in.readBoolean();
+            if (!manual || plugin.getConfig().getBoolean("unset-manual-afk-on-activity")) {
+                plugin.unsetAfk(receiver);
+            }
         } else {
             plugin.getLogger().log(Level.WARNING, subChannel + " is an unknown subchannel on " + event.getTag() + " channel!");
         }

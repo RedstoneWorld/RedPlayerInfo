@@ -77,3 +77,4 @@ auto-afk:
 auto-warning:
   enabled: true
   time: 2
+unset-manual-afk-on-activity: true
