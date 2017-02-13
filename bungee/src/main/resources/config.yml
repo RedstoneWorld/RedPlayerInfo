@@ -77,7 +77,3 @@ auto-afk:
 auto-warning:
   enabled: true
   time: 2
-custom-placeholder:
-  afk-style:
-    OFF: ""
-    ON: "&u"
