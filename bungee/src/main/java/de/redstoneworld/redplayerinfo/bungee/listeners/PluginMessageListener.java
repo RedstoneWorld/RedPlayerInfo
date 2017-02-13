@@ -53,9 +53,11 @@ public class PluginMessageListener implements Listener {
 
                     RedPlayer redPlayer = plugin.getPlayer(player);
                     if (!redPlayer.isAfk()) {
-                        if (seconds >= plugin.getConfig().getInt("afk-time") * 60 ) {
+                        int afkTime = plugin.getConfig().getInt("auto-afk.time") * 60;
+                        int warningTime = plugin.getConfig().getInt("auto-warning.time") * 60;
+                        if (seconds >= afkTime) {
                             plugin.setAfk(player, plugin.translate(plugin.getConfig().getString("messages.auto-afk")), false);
-                        } else if (plugin.getConfig().getBoolean("auto-warning.enabled") && seconds >= plugin.getConfig().getInt("auto-warning") * 60 ) {
+                        } else if (plugin.getConfig().getBoolean("auto-warning.enabled") && seconds >= warningTime && seconds < warningTime + 10) {
                             player.sendMessage(plugin.translate(plugin.getConfig().getString("messages.auto-warning")));
                         }
                     }
