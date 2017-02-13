@@ -2,7 +2,7 @@ name: ${plugin.name}
 version: '${minecraft.plugin.version}'
 main: de.redstoneworld.redplayerinfo.bungee.RedPlayerInfo
 author: Phoenix616
-softdepends: [BungeeTabListPlus]
+softDepends: [BungeeTabListPlus]
 commands:
    redplayerinfo:
       aliases: [playerinfo]
