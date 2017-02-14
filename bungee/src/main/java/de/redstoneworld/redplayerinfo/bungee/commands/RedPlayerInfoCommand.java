@@ -64,11 +64,11 @@ public class RedPlayerInfoCommand extends PluginCommand implements TabExecutor {
 
             if (player == null) {
                 if (playerId == null) {
-                    player = new RedPlayer(new UUID(0, 0), input);
+                    sender.sendMessage(BungeePlugin.translate(plugin.getConfig().getString("messages.unknown-player.name"), "input", input));
                 } else {
-                    player = new RedPlayer(playerId, "Name not known.");
+                    sender.sendMessage(BungeePlugin.translate(plugin.getConfig().getString("messages.unknown-player.uuid"), "input", input));
                 }
-                sender.sendMessage(BungeePlugin.translate(plugin.getConfig().getString("messages.unknown-player"), "input", input));
+                return;
             }
 
             try {
