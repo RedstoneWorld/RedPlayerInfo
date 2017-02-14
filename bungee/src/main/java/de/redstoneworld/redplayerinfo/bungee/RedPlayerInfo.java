@@ -13,6 +13,7 @@ import de.redstoneworld.redplayerinfo.bungee.storages.PlayerInfoStorage;
 import de.themoep.bungeeplugin.BungeePlugin;
 import net.alpenblock.bungeeperms.BungeePerms;
 import net.alpenblock.bungeeperms.User;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.io.IOException;
@@ -172,7 +173,7 @@ public final class RedPlayerInfo extends BungeePlugin {
         if (bungeePerms != null) {
             User user = bungeePerms.getPermissionsManager().getUser(player.getUniqueId(), true);
             if (user != null) {
-                return user.buildPrefix();
+                return ChatColor.translateAlternateColorCodes('&', user.buildPrefix());
             }
         }
         return "";
@@ -182,7 +183,7 @@ public final class RedPlayerInfo extends BungeePlugin {
         if (bungeePerms != null) {
             User user = bungeePerms.getPermissionsManager().getUser(player.getUniqueId(), true);
             if (user != null) {
-                return user.buildSuffix();
+                return ChatColor.translateAlternateColorCodes('&', user.buildSuffix());
             }
         }
         return "";
