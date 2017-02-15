@@ -75,8 +75,8 @@ messages:
     uuid: '&8[&6Player&fInfo&8]&f: &cDie angegebene Spieler-ID "&4%input%&c" wurde &4nicht gefunden&c.'
 auto-afk:
   enabled: true
-  time: 3
+  time: 180
 auto-warning:
   enabled: true
-  time: 2
+  time: 120
 unset-manual-afk-on-activity: true
