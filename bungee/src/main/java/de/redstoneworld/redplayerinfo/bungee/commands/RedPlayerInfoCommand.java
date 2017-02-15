@@ -193,7 +193,9 @@ public class RedPlayerInfoCommand extends PluginCommand implements TabExecutor {
                     "logintime", formatTime(player.getLoginTime()),
                     "logouttime", formatTime(player.getLogoutTime()),
                     "afktime", formatTime(player.getAfkTime()),
-                    "afkreason", player.getAfkMessage()
+                    "afkreason", player.getAfkMessage().isEmpty()
+                            ? BungeePlugin.translate(plugin.getConfig().getString("messages.afk-with-no-reason"))
+                            : player.getAfkMessage()
             );
         }
 
