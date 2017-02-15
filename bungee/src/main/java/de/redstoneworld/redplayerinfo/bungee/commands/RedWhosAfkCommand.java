@@ -26,12 +26,16 @@ public class RedWhosAfkCommand extends PluginCommand {
             }
         }
 
-        StringBuilder playersString = new StringBuilder(players.size() > 0 ? players.get(0) : "");
-        for(int i = 1; i < players.size(); i++) {
-            playersString.append(", ").append(players.get(i));
-        }
+        if (players.size() > 0) {
+            StringBuilder playersString = new StringBuilder(players.get(0));
+            for (int i = 1; i < players.size(); i++) {
+                playersString.append(", ").append(players.get(i));
+            }
 
-        sender.sendMessage(plugin.translate(plugin.getConfig().getString("messages.whos-afk"), "players", playersString.toString()));
+            sender.sendMessage(BungeePlugin.translate(plugin.getConfig().getString("messages.whos-afk"), "players", playersString.toString()));
+        } else {
+            sender.sendMessage(BungeePlugin.translate(plugin.getConfig().getString("messages.noone-is-afk")));
+        }
         return true;
     }
 }

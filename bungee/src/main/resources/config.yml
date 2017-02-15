@@ -70,6 +70,7 @@ messages:
   auto-warning: '&8[&4Red&fAFK&8]&f: Bist du noch anwesend? &2Bewege dich kurz, damit der Server es erkennt!'
   auto-afk: 'Inaktiv'
   whos-afk: '&fAbwesend: &f%players%'
+  noone-is-afk: '&fAbwesend: &f-'
   unknown-player:
     name: '&8[&6Player&fInfo&8]&f: &cDer angegebene Spieler "&4%input%&c" wurde &4nicht gefunden&c.'
     uuid: '&8[&6Player&fInfo&8]&f: &cDie angegebene Spieler-ID "&4%input%&c" wurde &4nicht gefunden&c.'
