@@ -110,13 +110,13 @@ public class RedPlayerInfoCommand extends PluginCommand implements TabExecutor {
             components.addAll(createComponents("info"));
             if (player.isOnline()) {
                 components.addAll(createComponents("status.online"));
+                if (player.isAfk()) {
+                    components.addAll(createComponents("status.afk"));
+                } else {
+                    components.addAll(createComponents("status.not-afk"));
+                }
             } else {
                 components.addAll(createComponents("status.offline"));
-            }
-            if (player.isAfk()) {
-                components.addAll(createComponents("status.afk"));
-            } else {
-                components.addAll(createComponents("status.not-afk"));
             }
             components.addAll(createComponents("extra"));
             return this;
