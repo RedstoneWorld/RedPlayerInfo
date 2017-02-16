@@ -110,6 +110,7 @@ public final class RedPlayerInfo extends BungeePlugin {
      * @return              true if he was afk before, false if not
      */
     public boolean unsetAfk(ProxiedPlayer proxiedPlayer) {
+        logDebug(proxiedPlayer.getName() + "/" + proxiedPlayer.getUniqueId() + " is not afk anymore");
         RedPlayer player = getPlayer(proxiedPlayer);
         if (player.isAfk()) {
             player.unsetAfk();
@@ -132,6 +133,7 @@ public final class RedPlayerInfo extends BungeePlugin {
      * @param manual        Whether or not he set this status imself via the command
      */
     public void setAfk(ProxiedPlayer proxiedPlayer, String reason, boolean manual) {
+        logDebug(proxiedPlayer.getName() + "/" + proxiedPlayer.getUniqueId() + " is now afk");
         RedPlayer player = getPlayer(proxiedPlayer);
         player.setAfk(reason, manual);
         if (getConfig().getBoolean("messages.public-broadcast")) {
@@ -199,5 +201,11 @@ public final class RedPlayerInfo extends BungeePlugin {
             }
         }
         return "";
+    }
+
+    public void logDebug(String message) {
+        if (getConfig().getBoolean("debug")) {
+            getLogger().log(Level.INFO, message);
+        }
     }
 }

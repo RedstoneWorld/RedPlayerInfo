@@ -40,6 +40,7 @@ public class PluginMessageListener implements Listener {
         ByteArrayDataInput in = ByteStreams.newDataInput(event.getData());
         String subChannel = in.readUTF();
         if ("afktime".equals(subChannel)) {
+            plugin.logDebug("Received afktime plugin message");
             if (plugin.getConfig().getBoolean("auto-afk.enabled")) {
                 int amount = in.readInt();
                 for (int i = 0; i < amount; i++) {
@@ -50,6 +51,7 @@ public class PluginMessageListener implements Listener {
                     if (player == null || player.hasPermission("rwm.redafk.afk-immune")) {
                         return;
                     }
+                    plugin.logDebug(player.getName() + "/" + player.getUniqueId() + " is afk for " + seconds + " seconds");
 
                     RedPlayer redPlayer = plugin.getPlayer(player);
                     if (!redPlayer.isAfk()) {
@@ -64,6 +66,7 @@ public class PluginMessageListener implements Listener {
                 }
             }
         } else if ("unsetafk".equals(subChannel)) {
+            plugin.logDebug(receiver.getName() + " received unsetafk plugin message");
             boolean manual = in.readBoolean();
             if (!manual || plugin.getConfig().getBoolean("unset-manual-afk-on-activity")) {
                 plugin.unsetAfk(receiver);
