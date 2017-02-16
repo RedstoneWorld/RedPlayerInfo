@@ -7,8 +7,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Level;
 
 public final class RedPlayerInfoBukkit extends JavaPlugin {
 
@@ -27,10 +29,11 @@ public final class RedPlayerInfoBukkit extends JavaPlugin {
             }
             ByteArrayDataInput in = ByteStreams.newDataInput(message);
             String subChannel = in.readUTF();
-            if ("setafk".equals(subChannel)) {
-                afkPlayers.put(new UUID(in.readLong(), in.readLong()), in.readBoolean());
+            UUID playerId = new UUID(in.readLong(), in.readLong());
+            if ("setafk".equals(subChannel) && isReal(playerId)) {
+                afkPlayers.put(playerId, in.readBoolean());
             } else if ("unsetafk".equals(subChannel)) {
-                afkPlayers.remove(new UUID(in.readLong(), in.readLong()));
+                afkPlayers.remove(playerId);
             }
         });
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
@@ -49,10 +52,22 @@ public final class RedPlayerInfoBukkit extends JavaPlugin {
      * @param player    The Player to set
      */
     public void updateLastActivity(Player player) {
-        lastActivity.put(player.getUniqueId(), System.currentTimeMillis());
-        if (isAfk(player.getUniqueId())) {
-            unsetAfk(player);
+        if (isReal(player.getUniqueId())) {
+            lastActivity.put(player.getUniqueId(), System.currentTimeMillis());
+            if (isAfk(player.getUniqueId())) {
+                unsetAfk(player);
+            }
         }
+    }
+
+    /**
+     * Check whether or not a player is a real one (eithe roffline or online mode) as
+     * Citizens 2 uses UUID with version 2 to indicate NPCs.
+     * @param playerId  The player to check
+     * @return          True if the player's UUID is version 3 or 4
+     */
+    private boolean isReal(UUID playerId) {
+        return playerId.version() == 3 || playerId.version() == 4;
     }
 
     private void unsetAfk(Player player) {
@@ -118,7 +133,16 @@ public final class RedPlayerInfoBukkit extends JavaPlugin {
                     out.writeInt((int) ((System.currentTimeMillis() - entry.getValue()) / 1000));
                 }
             }
-            getServer().getOnlinePlayers().iterator().next().sendPluginMessage(this, PLUGIN_MESSAGE_CHANNEL, out.toByteArray());
+            Iterator<? extends Player> playerIterator = getServer().getOnlinePlayers().iterator();
+            Player player = playerIterator.next();
+            while (!isReal(player.getUniqueId()) && playerIterator.hasNext()) {
+                player = playerIterator.next();
+            }
+            if (isReal(player.getUniqueId())) {
+                player.sendPluginMessage(this, PLUGIN_MESSAGE_CHANNEL, out.toByteArray());
+            } else {
+                getLogger().log(Level.WARNING, "Could not send plugin message as no real player was found?");
+            }
         }
     }
 }
