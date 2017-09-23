@@ -18,7 +18,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <plugin.name>RedPlayerInfo</plugin.name>
-        <plugin.version>1.0-SNAPSHOT</plugin.version>
+        <plugin.version>1.1-SNAPSHOT</plugin.version>
         <minecraft.plugin.version>${plugin.version} ${buildDescription}</minecraft.plugin.version>
     </properties>
 

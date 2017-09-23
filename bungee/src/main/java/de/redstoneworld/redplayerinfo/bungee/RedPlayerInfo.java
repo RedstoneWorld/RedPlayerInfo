@@ -11,8 +11,11 @@ import de.redstoneworld.redplayerinfo.bungee.storages.CachedStorage;
 import de.redstoneworld.redplayerinfo.bungee.storages.MysqlStorage;
 import de.redstoneworld.redplayerinfo.bungee.storages.PlayerInfoStorage;
 import de.themoep.bungeeplugin.BungeePlugin;
+import me.lucko.luckperms.LuckPerms;
+import me.lucko.luckperms.api.Contexts;
+import me.lucko.luckperms.api.LuckPermsApi;
+import me.lucko.luckperms.api.caching.MetaData;
 import net.alpenblock.bungeeperms.BungeePerms;
-import net.alpenblock.bungeeperms.User;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
@@ -29,6 +32,7 @@ public final class RedPlayerInfo extends BungeePlugin {
     private PlayerInfoStorage storage;
 
     private BungeePerms bungeePerms;
+    private LuckPermsApi luckPermsApi;
 
     @Override
     public void onEnable() {
@@ -50,6 +54,11 @@ public final class RedPlayerInfo extends BungeePlugin {
         if (getProxy().getPluginManager().getPlugin("BungeePerms") != null) {
             bungeePerms = BungeePerms.getInstance();
             getLogger().log(Level.INFO, "Detected BungeePerms " + bungeePerms.getPlugin().getVersion());
+        }
+
+        if (getProxy().getPluginManager().getPlugin("LuckPerms") != null) {
+            luckPermsApi = LuckPerms.getApi();
+            getLogger().log(Level.INFO, "Detected LuckPerms " + luckPermsApi.getVersion());
         }
     }
 
@@ -175,9 +184,15 @@ public final class RedPlayerInfo extends BungeePlugin {
 
     public String getPrefix(RedPlayer player) {
         if (bungeePerms != null) {
-            User user = bungeePerms.getPermissionsManager().getUser(player.getUniqueId(), true);
+            net.alpenblock.bungeeperms.User user = bungeePerms.getPermissionsManager().getUser(player.getUniqueId(), true);
             if (user != null) {
                 return ChatColor.translateAlternateColorCodes('&', user.buildPrefix());
+            }
+        }
+        if (luckPermsApi != null) {
+            MetaData metaData = getMetaData(player);
+            if (metaData != null && metaData.getSuffix() != null) {
+                return ChatColor.translateAlternateColorCodes('&', metaData.getPrefix());
             }
         }
         return "";
@@ -185,22 +200,57 @@ public final class RedPlayerInfo extends BungeePlugin {
 
     public String getSuffix(RedPlayer player) {
         if (bungeePerms != null) {
-            User user = bungeePerms.getPermissionsManager().getUser(player.getUniqueId(), true);
+            net.alpenblock.bungeeperms.User user = bungeePerms.getPermissionsManager().getUser(player.getUniqueId(), true);
             if (user != null) {
                 return ChatColor.translateAlternateColorCodes('&', user.buildSuffix());
+            }
+        }
+        if (luckPermsApi != null) {
+            MetaData metaData = getMetaData(player);
+            if (metaData != null && metaData.getSuffix() != null) {
+                return ChatColor.translateAlternateColorCodes('&', metaData.getSuffix());
             }
         }
         return "";
     }
 
-    public String getGroup(RedPlayer player) {
-        if (bungeePerms != null) {
-            User user = bungeePerms.getPermissionsManager().getUser(player.getUniqueId(), true);
-            if (user != null) {
-                return user.getGroupsString().get(0);
+    private MetaData getMetaData(RedPlayer player) {
+        me.lucko.luckperms.api.User lpUser = luckPermsApi.getUser(player.getUniqueId());
+        if (lpUser != null) {
+            Contexts contexts = luckPermsApi.getContextForUser(lpUser).orElse(null);
+            if (contexts != null) {
+                return lpUser.getCachedData().getMetaData(contexts);
             }
         }
-        return "";
+        return null;
+    }
+
+    public String getGroup(RedPlayer player) {
+        String groupName = "";
+        if (bungeePerms != null) {
+            net.alpenblock.bungeeperms.User user = bungeePerms.getPermissionsManager().getUser(player.getUniqueId(), true);
+            if (user != null) {
+                int rank = Integer.MAX_VALUE;
+                for (net.alpenblock.bungeeperms.Group group : user.getGroups()) {
+                    if (group.getRank() < rank) {
+                        groupName = group.getName();
+                    }
+                }
+            }
+        }
+        if (luckPermsApi != null) {
+            me.lucko.luckperms.api.User lpUser = luckPermsApi.getUser(player.getUniqueId());
+            if (lpUser != null) {
+                int weight = Integer.MIN_VALUE;
+                for (me.lucko.luckperms.api.Group group : luckPermsApi.getGroups()) {
+                    if (group.getWeight().orElse(weight) > weight
+                            && lpUser.hasPermission(luckPermsApi.buildNode("group." + group.getName()).setValue(true).build()).asBoolean()) {
+                        groupName = group.getName();
+                    }
+                }
+            }
+        }
+        return groupName;
     }
 
     public void logDebug(String message) {

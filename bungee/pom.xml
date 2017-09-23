@@ -30,6 +30,10 @@
             <id>bungeeperms-repo</id>
             <url>http://repo.wea-ondara.net/repository/public/</url>
         </repository>
+        <repository>
+            <id>luck-repo</id>
+            <url>https://repo.lucko.me/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -49,6 +53,12 @@
             <groupId>net.alpenblock</groupId>
             <artifactId>BungeePerms</artifactId>
             <version>3.0-dev-47</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>me.lucko.luckperms</groupId>
+            <artifactId>luckperms-api</artifactId>
+            <version>3.3</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
