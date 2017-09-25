@@ -245,7 +245,7 @@ public final class RedPlayerInfo extends BungeePlugin {
                 for (me.lucko.luckperms.api.Group group : luckPermsApi.getGroups()) {
                     if (group.getWeight().orElse(weight) > weight
                             && lpUser.hasPermission(luckPermsApi.buildNode("group." + group.getName()).setValue(true).build()).asBoolean()) {
-                        groupName = group.getName();
+                        groupName = group.getFriendlyName();
                     }
                 }
             }
