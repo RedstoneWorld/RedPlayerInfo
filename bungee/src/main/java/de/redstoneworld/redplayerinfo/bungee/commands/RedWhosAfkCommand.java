@@ -2,7 +2,6 @@ package de.redstoneworld.redplayerinfo.bungee.commands;
 
 import de.redstoneworld.redplayerinfo.bungee.RedPlayer;
 import de.redstoneworld.redplayerinfo.bungee.RedPlayerInfo;
-import de.themoep.bungeeplugin.BungeePlugin;
 import de.themoep.bungeeplugin.PluginCommand;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -10,17 +9,17 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RedWhosAfkCommand extends PluginCommand {
+public class RedWhosAfkCommand extends PluginCommand<RedPlayerInfo> {
 
-    public RedWhosAfkCommand(BungeePlugin plugin, String name, String permission, String permissionMessage, String description, String usage, String... aliases) {
-        super(plugin, name, permission, permissionMessage, description, usage, aliases);
+    public RedWhosAfkCommand(RedPlayerInfo plugin, String name) {
+        super(plugin, name);
     }
 
     @Override
     public boolean run(CommandSender sender, String[] args) {
         List<String> players = new ArrayList<>();
         for (ProxiedPlayer player : plugin.getProxy().getPlayers()) {
-            RedPlayer redPlayer = ((RedPlayerInfo) plugin).getPlayer(player);
+            RedPlayer redPlayer = plugin.getPlayer(player);
             if (redPlayer.isAfk()) {
                 players.add(redPlayer.getName());
             }
@@ -32,9 +31,9 @@ public class RedWhosAfkCommand extends PluginCommand {
                 playersString.append(", ").append(players.get(i));
             }
 
-            sender.sendMessage(BungeePlugin.translate(plugin.getConfig().getString("messages.whos-afk"), "players", playersString.toString()));
+            sender.sendMessage(RedPlayerInfo.translate(plugin.getConfig().getString("messages.whos-afk"), "players", playersString.toString()));
         } else {
-            sender.sendMessage(BungeePlugin.translate(plugin.getConfig().getString("messages.noone-is-afk")));
+            sender.sendMessage(RedPlayerInfo.translate(plugin.getConfig().getString("messages.noone-is-afk")));
         }
         return true;
     }

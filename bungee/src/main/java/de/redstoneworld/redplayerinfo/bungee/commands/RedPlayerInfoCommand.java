@@ -23,13 +23,10 @@ import java.util.List;
 import java.util.TimeZone;
 import java.util.UUID;
 
-public class RedPlayerInfoCommand extends PluginCommand implements TabExecutor {
+public class RedPlayerInfoCommand extends PluginCommand<RedPlayerInfo> implements TabExecutor {
 
-    private final RedPlayerInfo plugin;
-
-    public RedPlayerInfoCommand(BungeePlugin plugin, String name, String permission, String permissionMessage, String description, String usage, String... aliases) {
-        super(plugin, name, permission, permissionMessage, description, usage, aliases);
-        this.plugin = (RedPlayerInfo) plugin;
+    public RedPlayerInfoCommand(RedPlayerInfo plugin, String name) {
+        super(plugin, name);
     }
 
     @Override

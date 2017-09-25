@@ -36,9 +36,9 @@ public final class RedPlayerInfo extends BungeePlugin {
 
     @Override
     public void onEnable() {
-        registerCommand("redafk", RedAfkCommand.class);
-        registerCommand("redplayerinfo", RedPlayerInfoCommand.class);
-        registerCommand("redwhosafk", RedWhosAfkCommand.class);
+        getProxy().getPluginManager().registerCommand(this, new RedAfkCommand(this, "redafk"));
+        getProxy().getPluginManager().registerCommand(this, new RedPlayerInfoCommand(this, "redplayerinfo"));
+        getProxy().getPluginManager().registerCommand(this, new RedWhosAfkCommand(this, "redwhosafk"));
         getProxy().registerChannel(PLUGIN_MESSAGE_CHANNEL);
         getProxy().getPluginManager().registerListener(this, new PlayerListener(this));
         getProxy().getPluginManager().registerListener(this, new PluginMessageListener(this));

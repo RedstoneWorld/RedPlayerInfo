@@ -1,16 +1,15 @@
 package de.redstoneworld.redplayerinfo.bungee.commands;
 
 import de.redstoneworld.redplayerinfo.bungee.RedPlayerInfo;
-import de.themoep.bungeeplugin.BungeePlugin;
 import de.themoep.bungeeplugin.PluginCommand;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-public class RedAfkCommand extends PluginCommand {
+public class RedAfkCommand extends PluginCommand<RedPlayerInfo> {
 
-    public RedAfkCommand(BungeePlugin plugin, String name, String permission, String permissionMessage, String description, String usage, String... aliases) {
-        super(plugin, name, permission, permissionMessage, description, usage, aliases);
+    public RedAfkCommand(RedPlayerInfo plugin, String name) {
+        super(plugin, name);
     }
 
     @Override
@@ -21,18 +20,17 @@ public class RedAfkCommand extends PluginCommand {
         }
 
         if (args.length == 0) {
-            if (!((RedPlayerInfo) plugin).unsetAfk((ProxiedPlayer) sender)) {
-                ((RedPlayerInfo) plugin).setAfk((ProxiedPlayer) sender, "", true);
+            if (!plugin.unsetAfk((ProxiedPlayer) sender)) {
+                plugin.setAfk((ProxiedPlayer) sender, "", true);
             }
-            return true;
-        } else if (args.length > 0){
-            StringBuilder reason = new StringBuilder(args[0]);
-            for(int i = 1; i < args.length; i++) {
-                reason.append(" ").append(args[i]);
-            }
-            ((RedPlayerInfo) plugin).setAfk((ProxiedPlayer) sender, reason.toString(), true);
             return true;
         }
-        return false;
+
+        StringBuilder reason = new StringBuilder(args[0]);
+        for(int i = 1; i < args.length; i++) {
+            reason.append(" ").append(args[i]);
+        }
+        plugin.setAfk((ProxiedPlayer) sender, reason.toString(), true);
+        return true;
     }
 }
