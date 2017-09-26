@@ -22,6 +22,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 
 
@@ -239,6 +240,18 @@ public final class RedPlayerInfo extends BungeePlugin {
             }
         }
         if (luckPermsApi != null) {
+            if (!luckPermsApi.isUserLoaded(player.getUniqueId())) {
+                CompletableFuture<Boolean> future = luckPermsApi.getStorage().loadUser(player.getUniqueId(), player.getName());
+                // We are already on our own thread so we just pause it as there is
+                // no way of loading the user on the same thread in the LuckPermsAPI
+                // Times out after five seconds
+                long start = System.currentTimeMillis();
+                while (!future.isDone() && System.currentTimeMillis() < start + 5000) {
+                    try {
+                        Thread.sleep(10);
+                    } catch (InterruptedException ignored) { }
+                }
+            }
             me.lucko.luckperms.api.User lpUser = luckPermsApi.getUser(player.getUniqueId());
             if (lpUser != null) {
                 int weight = Integer.MIN_VALUE;
