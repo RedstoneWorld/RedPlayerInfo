@@ -192,7 +192,7 @@ public final class RedPlayerInfo extends BungeePlugin {
         }
         if (luckPermsApi != null) {
             MetaData metaData = getMetaData(player);
-            if (metaData != null && metaData.getSuffix() != null) {
+            if (metaData != null && metaData.getPrefix() != null) {
                 return ChatColor.translateAlternateColorCodes('&', metaData.getPrefix());
             }
         }
