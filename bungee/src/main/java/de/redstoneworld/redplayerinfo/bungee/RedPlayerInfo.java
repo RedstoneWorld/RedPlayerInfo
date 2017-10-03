@@ -20,9 +20,11 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 
@@ -249,11 +251,25 @@ public final class RedPlayerInfo extends BungeePlugin {
             }
             me.lucko.luckperms.api.User lpUser = luckPermsApi.getUser(player.getUniqueId());
             if (lpUser != null) {
+                me.lucko.luckperms.api.Group selectedGroup = null;
                 int weight = Integer.MIN_VALUE;
                 for (me.lucko.luckperms.api.Group group : luckPermsApi.getGroups()) {
                     if (group.getWeight().orElse(weight) > weight
                             && lpUser.hasPermission(luckPermsApi.buildNode("group." + group.getName()).setValue(true).build()).asBoolean()) {
-                        groupName = group.getFriendlyName();
+                        selectedGroup = group;
+                    }
+                }
+                if (selectedGroup != null) {
+                    // Workaround for LuckPerms not exposing the raw group display name via the API
+                    try {
+                        Field handleField = selectedGroup.getClass().getDeclaredField("handle");
+                        handleField.setAccessible(true);
+                        Object handle = handleField.get(selectedGroup);
+                        Method getRawDisplayName = handle.getClass().getMethod("getRawDisplayName");
+                        groupName = (String) getRawDisplayName.invoke(handle);
+                    } catch (NoSuchFieldException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+                        groupName = selectedGroup.getFriendlyName();
+                        getLogger().log(Level.WARNING, "Error while getting pretty group display name: " + e.getMessage());
                     }
                 }
             }
