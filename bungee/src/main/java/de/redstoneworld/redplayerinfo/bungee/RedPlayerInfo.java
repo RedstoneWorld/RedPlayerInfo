@@ -266,7 +266,7 @@ public final class RedPlayerInfo extends BungeePlugin {
                         handleField.setAccessible(true);
                         Object handle = handleField.get(selectedGroup);
                         Method getRawDisplayName = handle.getClass().getMethod("getRawDisplayName");
-                        groupName = (String) getRawDisplayName.invoke(handle);
+                        groupName = ChatColor.translateAlternateColorCodes('&', (String) getRawDisplayName.invoke(handle));
                     } catch (NoSuchFieldException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
                         groupName = selectedGroup.getFriendlyName();
                         getLogger().log(Level.WARNING, "Error while getting pretty group display name: " + e.getMessage());
