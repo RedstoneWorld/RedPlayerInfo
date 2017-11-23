@@ -20,9 +20,6 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -62,7 +59,7 @@ public final class RedPlayerInfo extends BungeePlugin {
 
         if (getProxy().getPluginManager().getPlugin("LuckPerms") != null) {
             luckPermsApi = LuckPerms.getApi();
-            getLogger().log(Level.INFO, "Detected LuckPerms " + luckPermsApi.getVersion());
+            getLogger().log(Level.INFO, "Detected LuckPerms " + luckPermsApi.getPlatformInfo().getVersion());
         }
     }
 
@@ -240,41 +237,29 @@ public final class RedPlayerInfo extends BungeePlugin {
                 int rank = Integer.MAX_VALUE;
                 for (net.alpenblock.bungeeperms.Group group : user.getGroups()) {
                     if (group.getRank() < rank) {
+                        rank = group.getRank();
                         groupName = group.getName();
                     }
                 }
             }
-        }
-        if (luckPermsApi != null) {
+        } else if (luckPermsApi != null) {
             if (!luckPermsApi.isUserLoaded(player.getUniqueId())) {
                 loadLuckPermsUser(player);
             }
             me.lucko.luckperms.api.User lpUser = luckPermsApi.getUser(player.getUniqueId());
             if (lpUser != null) {
-                me.lucko.luckperms.api.Group selectedGroup = null;
-                int weight = Integer.MIN_VALUE;
-                for (me.lucko.luckperms.api.Group group : luckPermsApi.getGroups()) {
-                    if (group.getWeight().orElse(weight) > weight
-                            && lpUser.hasPermission(luckPermsApi.buildNode("group." + group.getName()).setValue(true).build()).asBoolean()) {
-                        selectedGroup = group;
-                    }
-                }
-                if (selectedGroup != null) {
-                    // Workaround for LuckPerms not exposing the raw group display name via the API
-                    try {
-                        Field handleField = selectedGroup.getClass().getDeclaredField("handle");
-                        handleField.setAccessible(true);
-                        Object handle = handleField.get(selectedGroup);
-                        Method getRawDisplayName = handle.getClass().getMethod("getRawDisplayName");
-                        groupName = ChatColor.translateAlternateColorCodes('&', (String) getRawDisplayName.invoke(handle));
-                    } catch (NoSuchFieldException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-                        groupName = selectedGroup.getFriendlyName();
-                        getLogger().log(Level.WARNING, "Error while getting pretty group display name: " + e.getMessage());
+                
+                me.lucko.luckperms.api.Group group = luckPermsApi.getGroup(lpUser.getPrimaryGroup());
+                if (group != null) {
+                    groupName = group.getFriendlyName();
+                    int bracket = groupName.indexOf('(');
+                    if (bracket != -1 && groupName.endsWith(")")) {
+                        groupName = groupName.substring(bracket + 1, groupName.length() - 1);
                     }
                 }
             }
         }
-        return groupName;
+        return ChatColor.translateAlternateColorCodes('&', groupName);
     }
 
     /**
