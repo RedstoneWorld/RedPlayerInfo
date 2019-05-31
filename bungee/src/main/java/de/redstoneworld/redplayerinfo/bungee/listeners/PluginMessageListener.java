@@ -21,7 +21,7 @@ public class PluginMessageListener implements Listener {
 
     @EventHandler
     public void onPluginMessage(PluginMessageEvent event) {
-        if (!RedPlayerInfo.PLUGIN_MESSAGE_CHANNEL.equals(event.getTag())) {
+        if (!event.getTag().startsWith(RedPlayerInfo.PLUGIN_MESSAGE_CHANNEL)) {
             return;
         }
 
@@ -38,7 +38,7 @@ public class PluginMessageListener implements Listener {
 
         ProxiedPlayer receiver = (ProxiedPlayer) event.getReceiver();
         ByteArrayDataInput in = ByteStreams.newDataInput(event.getData());
-        String subChannel = in.readUTF();
+        String subChannel = event.getTag().split(":", 2)[1];
         if ("afktime".equals(subChannel)) {
             plugin.logDebug("Received afktime plugin message");
             if (plugin.getConfig().getBoolean("auto-afk.enabled")) {

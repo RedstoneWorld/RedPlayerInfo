@@ -28,7 +28,7 @@ import java.util.logging.Level;
 
 public final class RedPlayerInfo extends BungeePlugin {
 
-    public static final String PLUGIN_MESSAGE_CHANNEL = "RedPlayerInfo";
+    public static final String PLUGIN_MESSAGE_CHANNEL = "rpi:";
 
     private PlayerInfoStorage storage;
 
@@ -40,7 +40,9 @@ public final class RedPlayerInfo extends BungeePlugin {
         getProxy().getPluginManager().registerCommand(this, new RedAfkCommand(this, "redafk"));
         getProxy().getPluginManager().registerCommand(this, new RedPlayerInfoCommand(this, "redplayerinfo"));
         getProxy().getPluginManager().registerCommand(this, new RedWhosAfkCommand(this, "redwhosafk"));
-        getProxy().registerChannel(PLUGIN_MESSAGE_CHANNEL);
+        getProxy().registerChannel(PLUGIN_MESSAGE_CHANNEL + "setafk");
+        getProxy().registerChannel(PLUGIN_MESSAGE_CHANNEL + "unsetafk");
+        getProxy().registerChannel(PLUGIN_MESSAGE_CHANNEL + "afktime");
         getProxy().getPluginManager().registerListener(this, new PlayerListener(this));
         getProxy().getPluginManager().registerListener(this, new PluginMessageListener(this));
 
@@ -169,17 +171,15 @@ public final class RedPlayerInfo extends BungeePlugin {
         RedPlayer player = getPlayer(proxiedPlayer);
         if (player.isAfk()) {
             ByteArrayDataOutput out = ByteStreams.newDataOutput();
-            out.writeUTF("setafk");
             out.writeLong(player.getUniqueId().getMostSignificantBits());
             out.writeLong(player.getUniqueId().getLeastSignificantBits());
             out.writeBoolean(!player.isAutoAfk());
-            proxiedPlayer.getServer().sendData(PLUGIN_MESSAGE_CHANNEL, out.toByteArray());
+            proxiedPlayer.getServer().sendData(PLUGIN_MESSAGE_CHANNEL + "setafk", out.toByteArray());
         } else {
             ByteArrayDataOutput out = ByteStreams.newDataOutput();
-            out.writeUTF("unsetafk");
             out.writeLong(player.getUniqueId().getMostSignificantBits());
             out.writeLong(player.getUniqueId().getLeastSignificantBits());
-            proxiedPlayer.getServer().sendData(PLUGIN_MESSAGE_CHANNEL, out.toByteArray());
+            proxiedPlayer.getServer().sendData(PLUGIN_MESSAGE_CHANNEL + "unsetafk", out.toByteArray());
         }
     }
 

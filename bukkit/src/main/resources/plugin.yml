@@ -2,3 +2,4 @@ name: RedPlayerInfoBukkit
 version: '${minecraft.plugin.version}'
 main: de.redstoneworld.redplayerinfo.bukkit.RedPlayerInfoBukkit
 authors: [Phoenix616]
+api-version: 1.13

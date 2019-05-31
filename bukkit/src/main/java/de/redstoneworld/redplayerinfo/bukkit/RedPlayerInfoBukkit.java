@@ -14,7 +14,7 @@ import java.util.logging.Level;
 
 public final class RedPlayerInfoBukkit extends JavaPlugin {
 
-    private static final String PLUGIN_MESSAGE_CHANNEL = "RedPlayerInfo";
+    private static final String PLUGIN_MESSAGE_CHANNEL = "rpi:";
 
     private Map<UUID, Long> lastActivity = new HashMap<>();
 
@@ -22,17 +22,20 @@ public final class RedPlayerInfoBukkit extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        getServer().getMessenger().registerOutgoingPluginChannel(this, PLUGIN_MESSAGE_CHANNEL);
-        getServer().getMessenger().registerIncomingPluginChannel(this, PLUGIN_MESSAGE_CHANNEL, (channel, player, message) -> {
-            if (!PLUGIN_MESSAGE_CHANNEL.equals(channel)) {
-                return;
-            }
+        getServer().getMessenger().registerOutgoingPluginChannel(this, PLUGIN_MESSAGE_CHANNEL + "unsetafk");
+        getServer().getMessenger().registerOutgoingPluginChannel(this, PLUGIN_MESSAGE_CHANNEL + "afktime");
+        getServer().getMessenger().registerIncomingPluginChannel(this, PLUGIN_MESSAGE_CHANNEL + "setafk", (channel, player, message) -> {
             ByteArrayDataInput in = ByteStreams.newDataInput(message);
-            String subChannel = in.readUTF();
             UUID playerId = new UUID(in.readLong(), in.readLong());
-            if ("setafk".equals(subChannel) && isReal(playerId)) {
+            if (isReal(playerId)) {
                 afkPlayers.put(playerId, in.readBoolean());
-            } else if ("unsetafk".equals(subChannel)) {
+            }
+
+        });
+        getServer().getMessenger().registerIncomingPluginChannel(this, PLUGIN_MESSAGE_CHANNEL + "unsetafk", (channel, player, message) -> {
+            ByteArrayDataInput in = ByteStreams.newDataInput(message);
+            UUID playerId = new UUID(in.readLong(), in.readLong());
+            if (isReal(playerId)) {
                 afkPlayers.remove(playerId);
             }
         });
@@ -72,9 +75,8 @@ public final class RedPlayerInfoBukkit extends JavaPlugin {
 
     private void unsetAfk(Player player) {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
-        out.writeUTF("unsetafk");
         out.writeBoolean(!isAutoAfk(player.getUniqueId()));
-        player.sendPluginMessage(this, PLUGIN_MESSAGE_CHANNEL, out.toByteArray());
+        player.sendPluginMessage(this, PLUGIN_MESSAGE_CHANNEL + "unsetafk", out.toByteArray());
         afkPlayers.remove(player.getUniqueId());
     }
 
@@ -124,7 +126,6 @@ public final class RedPlayerInfoBukkit extends JavaPlugin {
     private void updateStatus() {
         if (!getServer().getOnlinePlayers().isEmpty() && lastActivity.size() - afkPlayers.size() > 0) {
             ByteArrayDataOutput out = ByteStreams.newDataOutput();
-            out.writeUTF("afktime");
             out.writeInt(lastActivity.size() - afkPlayers.size());
             for (Map.Entry<UUID, Long> entry : lastActivity.entrySet()) {
                 if (!isAfk(entry.getKey())) {
@@ -139,7 +140,7 @@ public final class RedPlayerInfoBukkit extends JavaPlugin {
                 player = playerIterator.next();
             }
             if (isReal(player.getUniqueId())) {
-                player.sendPluginMessage(this, PLUGIN_MESSAGE_CHANNEL, out.toByteArray());
+                player.sendPluginMessage(this, PLUGIN_MESSAGE_CHANNEL + "afktime", out.toByteArray());
             } else {
                 getLogger().log(Level.WARNING, "Could not send plugin message as no real player was found?");
             }
