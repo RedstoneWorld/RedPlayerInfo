@@ -3,6 +3,7 @@ package de.redstoneworld.redplayerinfo.bungee;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import de.redstoneworld.redplayerinfo.bungee.commands.RedAfkCommand;
+import de.redstoneworld.redplayerinfo.bungee.commands.RedPlayerListCommand;
 import de.redstoneworld.redplayerinfo.bungee.commands.RedPlayerInfoCommand;
 import de.redstoneworld.redplayerinfo.bungee.commands.RedWhosAfkCommand;
 import de.redstoneworld.redplayerinfo.bungee.listeners.PlayerListener;
@@ -35,10 +36,13 @@ public final class RedPlayerInfo extends BungeePlugin {
     private BungeePerms bungeePerms;
     private LuckPermsApi luckPermsApi;
 
+    private RedPlayerListCommand redPlayerListCommand;
+
     @Override
     public void onEnable() {
         getProxy().getPluginManager().registerCommand(this, new RedAfkCommand(this, "redafk"));
         getProxy().getPluginManager().registerCommand(this, new RedPlayerInfoCommand(this, "redplayerinfo"));
+        getProxy().getPluginManager().registerCommand(this, (redPlayerListCommand = new RedPlayerListCommand(this, "redplayerlist")));
         getProxy().getPluginManager().registerCommand(this, new RedWhosAfkCommand(this, "redwhosafk"));
         getProxy().registerChannel(PLUGIN_MESSAGE_CHANNEL + "setafk");
         getProxy().registerChannel(PLUGIN_MESSAGE_CHANNEL + "unsetafk");
@@ -95,6 +99,7 @@ public final class RedPlayerInfo extends BungeePlugin {
         for (RedPlayer player : currentPlayers) {
             storage.savePlayer(player);
         }
+        redPlayerListCommand.load();
         return !error;
     }
 
@@ -229,16 +234,14 @@ public final class RedPlayerInfo extends BungeePlugin {
         return null;
     }
 
-    public String getGroup(RedPlayer player) {
-        String groupName = "";
+    public RedGroup getGroup(RedPlayer player) {
+        RedGroup redGroup = null;
         if (bungeePerms != null) {
             net.alpenblock.bungeeperms.User user = bungeePerms.getPermissionsManager().getUser(player.getUniqueId(), true);
             if (user != null) {
-                int rank = Integer.MAX_VALUE;
                 for (net.alpenblock.bungeeperms.Group group : user.getGroups()) {
-                    if (group.getRank() < rank) {
-                        rank = group.getRank();
-                        groupName = group.getName();
+                    if (redGroup == null || group.getRank() < redGroup.getRank()) {
+                        redGroup = new RedGroup(group.getName(), group.getDisplay(), group.getPrefix(), group.getSuffix(), group.getRank());
                     }
                 }
             }
@@ -251,15 +254,24 @@ public final class RedPlayerInfo extends BungeePlugin {
                 
                 me.lucko.luckperms.api.Group group = luckPermsApi.getGroup(lpUser.getPrimaryGroup());
                 if (group != null) {
-                    groupName = group.getFriendlyName();
+                    String groupName = group.getFriendlyName();
                     int bracket = groupName.indexOf('(');
                     if (bracket != -1 && groupName.endsWith(")")) {
                         groupName = groupName.substring(bracket + 1, groupName.length() - 1);
                     }
+                    Contexts contexts = luckPermsApi.getContextForUser(lpUser).orElse(null);
+                    String prefix = "";
+                    String suffix = "";
+                    if (contexts != null) {
+                        MetaData metaData = group.getCachedData().getMetaData(contexts);
+                        prefix = metaData.getPrefix();
+                        suffix = metaData.getSuffix();
+                    }
+                    redGroup = new RedGroup(group.getName(), groupName, prefix, suffix, -group.getWeight().orElse(0));
                 }
             }
         }
-        return ChatColor.translateAlternateColorCodes('&', groupName);
+        return redGroup != null ? redGroup : new RedGroup();
     }
 
     /**

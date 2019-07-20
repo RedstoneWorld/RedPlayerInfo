@@ -1,5 +1,6 @@
 package de.redstoneworld.redplayerinfo.bungee.commands;
 
+import de.redstoneworld.redplayerinfo.bungee.RedGroup;
 import de.redstoneworld.redplayerinfo.bungee.RedPlayer;
 import de.redstoneworld.redplayerinfo.bungee.RedPlayerInfo;
 import de.themoep.bungeeplugin.BungeePlugin;
@@ -180,13 +181,17 @@ public class RedPlayerInfoCommand extends PluginCommand<RedPlayerInfo> implement
         }
 
         private String addInfo(String message) {
+            RedGroup group = plugin.getGroup(player);
             return BungeePlugin.translate(message,
                     "sendername", sender.getName(),
                     "playername", player.getName(),
                     "playeruuid", player.getUniqueId().toString(),
                     "playerprefix", plugin.getPrefix(player),
                     "playersuffix", plugin.getSuffix(player),
-                    "playergroup", plugin.getGroup(player),
+                    "playergroup", group.getDisplayName(),
+                    "playergroupname", group.getName(),
+                    "playergroupprefix", group.getPrefix(),
+                    "playergroupsuffix", group.getSuffix(),
                     "logintime", formatTime(player.getLoginTime()),
                     "logouttime", formatTime(player.getLogoutTime()),
                     "afktime", formatTime(player.getAfkTime()),

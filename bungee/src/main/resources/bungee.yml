@@ -7,13 +7,19 @@ commands:
    redplayerinfo:
       aliases: [playerinfo]
       description: Get infos about a player
-      usage: 'Usage: /<command> <name|uuid>|[--reload]'
+      usage: '&8[&6Player&fInfo&8]&f: Schreibe: &7/<command> <Spieler-Name>'
       permission: rwm.playerinfo.getinfos
+      permission-message: You don't have the permission <permission>
+   redplayerelist:
+      aliases: [redlist, rplayerlist, rlist]
+      description: Get a list of players
+      usage: '&8[&6Player&fList&8]&f: Schreibe: &7/<command> <ggf. Server-Name>'
+      permission: rwm.playerlist
       permission-message: You don't have the permission <permission>
    redafk:
       aliases: [afk]
       description: Allow a player to set himself afk
-      usage: 'Usage: /<command> [<reason>]'
+      usage: '&8[&6Player&fAfk&8]&f: Schreibe: &7/<command> <ggf. Grund>'
       permission: rwm.redafk.afk-use
       permission-message: You don't have the permission <permission>
    redwhosafk:

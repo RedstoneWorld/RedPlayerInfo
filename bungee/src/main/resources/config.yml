@@ -24,7 +24,7 @@ playerinfo:
     playernameaction:
       text: '&7%playername%'
       click-event:
-        action: 'run_command'
+        action: 'suggest_command'
         value: '%playername%'
       hover-event:
         action: 'show_text'
@@ -32,7 +32,7 @@ playerinfo:
     playeruuidaction:
       text: '&f%playeruuid%'
       click-event:
-        action: 'run_command'
+        action: 'suggest_command'
         value: '%playeruuid%'
       hover-event:
         action: 'show_text'
@@ -61,6 +61,33 @@ playerinfo:
       hover-event:
         action: 'show_text'
         value: '&7https://namemc.com/profile/%playeruuid% öffnen!'
+playerlist:
+  replacements:
+    'global': 'alle Server'
+    'hs': 'Hauptserver'
+    'na': 'Testserver "Natur"'
+    'fl': 'Testserver "Flach"'
+    'sp': 'Testserver "Space"'
+    'wiki': 'Wiki-Welten'
+    'sv': 'Survival-Server'
+  liststyle:
+    head: |
+      
+      &8------------------- [&6Player&fList&8] -------------------
+      
+      &6Server: &f%server%
+    
+    rang: ' &4> %groupprefix%%group%&f:'
+    player: '[&7%afk-tag%%playername%](/redplayerinfo %playername% show_text=&7PlayerInfo anzeigen!)' # Spieler anklickbar -> AusfÃ¼hren des Befehls "/pi <player>"
+    afk-tag: '&m'
+    player-seperator: ', '
+    no-player: '&f-'
+    footer: |
+      
+      &8----------------------------------------------------------
+  
+  rang-blacklist: []
+  server-blacklist: []
 messages:
   public-broadcast: true
   is-afk: '&c[-] &f%player% &7ist gerade &fabwesend&7. %reason%'
@@ -76,6 +103,7 @@ messages:
   unknown-player:
     name: '&8[&6Player&fInfo&8]&f: &cDer angegebene Spieler "&4%input%&c" wurde &4nicht gefunden&c.'
     uuid: '&8[&6Player&fInfo&8]&f: &cDie angegebene Spieler-ID "&4%input%&c" wurde &4nicht gefunden&c.'
+  server-doesnt-exist: '&8[&6Player&fList&8]&f: &cDieser &4Server existiert nicht&c.'
 auto-afk:
   enabled: true
   time: 180
