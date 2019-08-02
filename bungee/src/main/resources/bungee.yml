@@ -14,7 +14,7 @@ commands:
       aliases: [redlist, rplayerlist, rlist]
       description: Get a list of players
       usage: '&8[&6Player&fList&8]&f: Schreibe: &7/<command> <ggf. Server-Name>'
-      permission: rwm.playerlist
+      permission: rwm.playerinfo.playerlist
       permission-message: You don't have the permission <permission>
    redafk:
       aliases: [afk]
