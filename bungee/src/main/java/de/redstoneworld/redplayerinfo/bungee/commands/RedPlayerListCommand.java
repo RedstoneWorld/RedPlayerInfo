@@ -117,7 +117,7 @@ public class RedPlayerListCommand extends PluginCommand<RedPlayerInfo> {
                     if (groupBlackList.contains(group.getKey().getName())) {
                         continue;
                     }
-                    components.add(createComponents("rank", getReplacements(group.getKey())));
+                    components.add(createComponents("rang", getReplacements(group.getKey())));
                     List<BaseComponent> playerList = new ArrayList<>();
                     for (RedPlayer redPlayer : group.getValue()) {
                         if (!playerList.isEmpty()) {
