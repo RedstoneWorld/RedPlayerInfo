@@ -10,7 +10,7 @@ commands:
       usage: '&8[&6Player&fInfo&8]&f: Schreibe: &7/<command> <Spieler-Name>'
       permission: rwm.playerinfo.getinfos
       permission-message: You don't have the permission <permission>
-   redplayerelist:
+   redplayerlist:
       aliases: [redlist, rplayerlist, rlist]
       description: Get a list of players
       usage: '&8[&6Player&fList&8]&f: Schreibe: &7/<command> <ggf. Server-Name>'
