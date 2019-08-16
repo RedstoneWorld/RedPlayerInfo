@@ -146,7 +146,7 @@ public class RedPlayerListCommand extends PluginCommand<RedPlayerInfo> {
         private String[] getReplacements(RedGroup group) {
             return new String[]{
                     "sendername", sender.getName(),
-                    "group", group.getDisplayName(),
+                    "group", ChatColor.translateAlternateColorCodes('&', group.getDisplayName()),
                     "groupname", group.getName(),
                     "groupprefix", group.getPrefix(),
                     "groupsuffix", group.getSuffix()
@@ -160,7 +160,7 @@ public class RedPlayerListCommand extends PluginCommand<RedPlayerInfo> {
                     "playeruuid", player.getUniqueId().toString(),
                     "playerprefix", plugin.getPrefix(player),
                     "playersuffix", plugin.getSuffix(player),
-                    "playergroup", plugin.getGroup(player).getDisplayName(),
+                    "playergroup", ChatColor.translateAlternateColorCodes('&', plugin.getGroup(player).getDisplayName()),
                     "afk-tag", player.isAfk() ? BungeePlugin.translate(plugin.getConfig().getString("playerlist.liststyle.afk-tag")) : ""
             };
         }

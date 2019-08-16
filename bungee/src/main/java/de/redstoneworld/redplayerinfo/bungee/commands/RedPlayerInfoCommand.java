@@ -188,7 +188,7 @@ public class RedPlayerInfoCommand extends PluginCommand<RedPlayerInfo> implement
                     "playeruuid", player.getUniqueId().toString(),
                     "playerprefix", plugin.getPrefix(player),
                     "playersuffix", plugin.getSuffix(player),
-                    "playergroup", group.getDisplayName(),
+                    "playergroup", ChatColor.translateAlternateColorCodes('&', group.getDisplayName()),
                     "playergroupname", group.getName(),
                     "playergroupprefix", group.getPrefix(),
                     "playergroupsuffix", group.getSuffix(),
