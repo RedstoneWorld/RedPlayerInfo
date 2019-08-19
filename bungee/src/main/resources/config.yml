@@ -80,7 +80,7 @@ playerlist:
     rang: ' &4> %groupprefix%%group%&f:'
     player: '[&7%afk-tag%%playername%](/redplayerinfo %playername% show_text=&7PlayerInfo anzeigen!)' # Spieler anklickbar -> AusfÃ¼hren des Befehls "/pi <player>"
     afk-tag: '&m'
-    player-seperator: ', '
+    player-separator: ', '
     no-player: '&f-'
     footer: |
       
