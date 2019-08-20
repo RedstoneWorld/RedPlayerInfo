@@ -57,11 +57,11 @@ public class RedPlayerListCommand extends PluginCommand<RedPlayerInfo> {
                     server = plugin.getProxy().getServerInfo(alias);
                 }
             }
-            if (server == null || serverBlackList.contains(server.getName()) || !sender.hasPermission("rwm.playerinfo.playerlist." + server.getName())) {
+            if (server == null || serverBlackList.contains(server.getName()) || !sender.hasPermission(getCommandPermission() + "." + server.getName())) {
                 sender.sendMessage(BungeePlugin.translate(plugin.getConfig().getString("messages.server-doesnt-exist"), "input", String.join(" ", args)));
                 return true;
             }
-        } else if (!sender.hasPermission("rwm.playerinfo.playerlist.global")) {
+        } else if (!sender.hasPermission(getCommandPermission() + ".global")) {
             return false;
         }
 
