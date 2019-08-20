@@ -139,6 +139,7 @@ public class RedPlayerListCommand extends PluginCommand<RedPlayerInfo> {
         private String[] getReplacements() {
             return new String[]{
                     "sendername", sender.getName(),
+                    "playeramount", String.valueOf(server != null ? server.getPlayers().size() : plugin.getProxy().getOnlineCount()),
                     "server", plugin.getConfig().getString("playerlist.replacements." + (server != null ? server.getName() : "global"), server != null ? server.getName() : "global")
             };
         }
