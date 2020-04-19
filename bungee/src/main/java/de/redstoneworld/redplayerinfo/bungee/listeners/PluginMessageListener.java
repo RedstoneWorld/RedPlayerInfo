@@ -25,6 +25,7 @@ public class PluginMessageListener implements Listener {
             return;
         }
 
+        event.setCancelled(true);
         if (!(event.getReceiver() instanceof ProxiedPlayer)) {
             // disallow plugin messages from the client
             String senderName = event.getSender().getAddress().toString();
@@ -32,7 +33,6 @@ public class PluginMessageListener implements Listener {
                 senderName = ((ProxiedPlayer) event.getSender()).getName();
             }
             plugin.getLogger().log(Level.WARNING, senderName + " tried to send plugin message on " + event.getTag() + " channel!");
-            event.setCancelled(true);
             return;
         }
 
