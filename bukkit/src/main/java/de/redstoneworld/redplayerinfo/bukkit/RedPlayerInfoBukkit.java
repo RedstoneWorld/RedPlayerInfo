@@ -131,7 +131,7 @@ public final class RedPlayerInfoBukkit extends JavaPlugin {
                 if (!isAfk(entry.getKey())) {
                     out.writeLong(entry.getKey().getMostSignificantBits());
                     out.writeLong(entry.getKey().getLeastSignificantBits());
-                    out.writeInt((int) ((System.currentTimeMillis() - entry.getValue()) / 1000));
+                    out.writeLong((System.currentTimeMillis() - entry.getValue()) / 1000);
                 }
             }
             Iterator<? extends Player> playerIterator = getServer().getOnlinePlayers().iterator();

@@ -45,7 +45,7 @@ public class PluginMessageListener implements Listener {
                 int amount = in.readInt();
                 for (int i = 0; i < amount; i++) {
                     UUID playerId = new UUID(in.readLong(), in.readLong());
-                    int seconds = in.readInt();
+                    long seconds = in.readLong();
 
                     ProxiedPlayer player = plugin.getProxy().getPlayer(playerId);
                     if (player == null || player.hasPermission("rwm.redafk.afk-immune")) {
