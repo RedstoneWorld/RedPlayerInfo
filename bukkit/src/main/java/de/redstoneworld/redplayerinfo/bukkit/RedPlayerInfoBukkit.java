@@ -37,6 +37,10 @@ public final class RedPlayerInfoBukkit extends JavaPlugin {
             UUID playerId = new UUID(in.readLong(), in.readLong());
             if (isReal(playerId)) {
                 afkPlayers.remove(playerId);
+                Player p = getServer().getPlayer(playerId);
+                if (p != null) {
+                    updateLastActivity(p);
+                }
             }
         });
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
