@@ -35,6 +35,10 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onSwitchServer(ServerSwitchEvent event) {
+        RedPlayer player = plugin.getPlayer(event.getPlayer());
+        if (player.isAfk() && !player.isAutoAfk() || plugin.getConfig().getBoolean("unset-manual-afk-on-activity")) {
+            plugin.unsetAfk(event.getPlayer());
+        }
         plugin.sendAfkInfo(event.getPlayer());
     }
 }
