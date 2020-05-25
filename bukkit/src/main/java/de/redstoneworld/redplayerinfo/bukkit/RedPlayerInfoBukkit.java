@@ -128,7 +128,14 @@ public final class RedPlayerInfoBukkit extends JavaPlugin {
      * Send all the activity status to the Bungee
      */
     private void updateStatus() {
-        if (!getServer().getOnlinePlayers().isEmpty() && lastActivity.size() - afkPlayers.size() > 0) {
+        if (getServer().getOnlinePlayers().isEmpty()) {
+            lastActivity.clear();
+            afkPlayers.clear();
+        } else {
+            lastActivity.keySet().removeIf(id -> getServer().getPlayer(id) == null);
+            afkPlayers.keySet().removeIf(id -> getServer().getPlayer(id) == null);
+        }
+        if (lastActivity.size() - afkPlayers.size() > 0) {
             ByteArrayDataOutput out = ByteStreams.newDataOutput();
             out.writeInt(lastActivity.size() - afkPlayers.size());
             for (Map.Entry<UUID, Long> entry : lastActivity.entrySet()) {
