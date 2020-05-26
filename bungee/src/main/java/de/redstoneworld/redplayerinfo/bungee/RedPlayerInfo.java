@@ -45,6 +45,13 @@ public final class RedPlayerInfo extends BungeePlugin {
     private RedPlayerListCommand redPlayerListCommand;
 
     @Override
+    public void onLoad() {
+        if (getProxy().getPluginManager().getPlugin("BungeeTabListPlus") != null) {
+            new AfkPlaceholderVariable(this).register();
+        }
+    }
+
+    @Override
     public void onEnable() {
         getProxy().getPluginManager().registerCommand(this, new RedAfkCommand(this, "redafk"));
         getProxy().getPluginManager().registerCommand(this, new RedPlayerInfoCommand(this, "redplayerinfo"));
@@ -58,10 +65,6 @@ public final class RedPlayerInfo extends BungeePlugin {
 
         if (!load()) {
             getLogger().log(Level.SEVERE, "Error while enabling the plugin!");
-        }
-        
-        if (getProxy().getPluginManager().getPlugin("BungeeTabListPlus") != null) {
-            new AfkPlaceholderVariable(this).register();
         }
 
         if (getProxy().getPluginManager().getPlugin("BungeePerms") != null) {
