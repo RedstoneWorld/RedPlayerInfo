@@ -12,11 +12,14 @@ import de.redstoneworld.redplayerinfo.bungee.storages.CachedStorage;
 import de.redstoneworld.redplayerinfo.bungee.storages.MysqlStorage;
 import de.redstoneworld.redplayerinfo.bungee.storages.PlayerInfoStorage;
 import de.themoep.bungeeplugin.BungeePlugin;
-import me.lucko.luckperms.LuckPerms;
-import me.lucko.luckperms.api.Contexts;
-import me.lucko.luckperms.api.LuckPermsApi;
-import me.lucko.luckperms.api.caching.MetaData;
 import net.alpenblock.bungeeperms.BungeePerms;
+import net.luckperms.api.LuckPerms;
+import net.luckperms.api.LuckPermsProvider;
+import net.luckperms.api.cacheddata.CachedMetaData;
+import net.luckperms.api.context.ContextSet;
+import net.luckperms.api.model.group.Group;
+import net.luckperms.api.model.user.User;
+import net.luckperms.api.query.QueryOptions;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
@@ -24,6 +27,9 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 
 
@@ -34,7 +40,7 @@ public final class RedPlayerInfo extends BungeePlugin {
     private PlayerInfoStorage storage;
 
     private BungeePerms bungeePerms;
-    private LuckPermsApi luckPermsApi;
+    private LuckPerms luckPermsApi;
 
     private RedPlayerListCommand redPlayerListCommand;
 
@@ -64,8 +70,8 @@ public final class RedPlayerInfo extends BungeePlugin {
         }
 
         if (getProxy().getPluginManager().getPlugin("LuckPerms") != null) {
-            luckPermsApi = LuckPerms.getApi();
-            getLogger().log(Level.INFO, "Detected LuckPerms " + luckPermsApi.getPlatformInfo().getVersion());
+            luckPermsApi = LuckPermsProvider.get();
+            getLogger().log(Level.INFO, "Detected LuckPerms " + luckPermsApi.getPluginMetadata().getVersion());
         }
     }
 
@@ -196,7 +202,7 @@ public final class RedPlayerInfo extends BungeePlugin {
             }
         }
         if (luckPermsApi != null) {
-            MetaData metaData = getMetaData(player);
+            CachedMetaData metaData = getMetaData(player);
             if (metaData != null && metaData.getPrefix() != null) {
                 return ChatColor.translateAlternateColorCodes('&', metaData.getPrefix());
             }
@@ -212,7 +218,7 @@ public final class RedPlayerInfo extends BungeePlugin {
             }
         }
         if (luckPermsApi != null) {
-            MetaData metaData = getMetaData(player);
+            CachedMetaData metaData = getMetaData(player);
             if (metaData != null && metaData.getSuffix() != null) {
                 return ChatColor.translateAlternateColorCodes('&', metaData.getSuffix());
             }
@@ -220,15 +226,15 @@ public final class RedPlayerInfo extends BungeePlugin {
         return "";
     }
 
-    private MetaData getMetaData(RedPlayer player) {
-        if (!luckPermsApi.isUserLoaded(player.getUniqueId())) {
+    private CachedMetaData getMetaData(RedPlayer player) {
+        if (!luckPermsApi.getUserManager().isLoaded(player.getUniqueId())) {
             loadLuckPermsUser(player);
         }
-        me.lucko.luckperms.api.User lpUser = luckPermsApi.getUser(player.getUniqueId());
+        User lpUser = luckPermsApi.getUserManager().getUser(player.getUniqueId());
         if (lpUser != null) {
-            Contexts contexts = luckPermsApi.getContextForUser(lpUser).orElse(null);
+            ContextSet contexts = luckPermsApi.getContextManager().getContext(lpUser).orElse(null);
             if (contexts != null) {
-                return lpUser.getCachedData().getMetaData(contexts);
+                return lpUser.getCachedData().getMetaData(QueryOptions.contextual(contexts));
             }
         }
         return null;
@@ -246,24 +252,24 @@ public final class RedPlayerInfo extends BungeePlugin {
                 }
             }
         } else if (luckPermsApi != null) {
-            if (!luckPermsApi.isUserLoaded(player.getUniqueId())) {
+            if (!luckPermsApi.getUserManager().isLoaded(player.getUniqueId())) {
                 loadLuckPermsUser(player);
             }
-            me.lucko.luckperms.api.User lpUser = luckPermsApi.getUser(player.getUniqueId());
+            net.luckperms.api.model.user.User lpUser = luckPermsApi.getUserManager().getUser(player.getUniqueId());
             if (lpUser != null) {
-                
-                me.lucko.luckperms.api.Group group = luckPermsApi.getGroup(lpUser.getPrimaryGroup());
+
+                Group group = luckPermsApi.getGroupManager().getGroup(lpUser.getPrimaryGroup());
                 if (group != null) {
                     String groupName = group.getFriendlyName();
                     int bracket = groupName.indexOf('(');
                     if (bracket != -1 && groupName.endsWith(")")) {
                         groupName = groupName.substring(bracket + 1, groupName.length() - 1);
                     }
-                    Contexts contexts = luckPermsApi.getContextForUser(lpUser).orElse(null);
+                    ContextSet contexts = luckPermsApi.getContextManager().getContext(lpUser).orElse(null);
                     String prefix = "";
                     String suffix = "";
                     if (contexts != null) {
-                        MetaData metaData = group.getCachedData().getMetaData(contexts);
+                        CachedMetaData metaData = lpUser.getCachedData().getMetaData(QueryOptions.contextual(contexts));
                         prefix = metaData.getPrefix();
                         suffix = metaData.getSuffix();
                     }
@@ -279,15 +285,10 @@ public final class RedPlayerInfo extends BungeePlugin {
      * @param player The player to load
      */
     private void loadLuckPermsUser(RedPlayer player) {
-        CompletableFuture<Boolean> future = luckPermsApi.getStorage().loadUser(player.getUniqueId(), player.getName());
-        // We are already on our own thread so we just pause it as there is
-        // no way of loading the user on the same thread in the LuckPermsAPI
-        // Times out after five seconds
-        long start = System.currentTimeMillis();
-        while (!future.isDone() && System.currentTimeMillis() < start + 5000) {
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException ignored) { }
+        try {
+            luckPermsApi.getUserManager().loadUser(player.getUniqueId(), player.getName()).get(5, TimeUnit.SECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            getLogger().log(Level.WARNING, "Failed to load LuckPerms data of " + player.getName() + "/" + player.getUniqueId() + "! " + e.getMessage());
         }
     }
 
