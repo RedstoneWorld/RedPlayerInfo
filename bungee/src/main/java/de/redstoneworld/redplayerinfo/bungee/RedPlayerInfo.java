@@ -46,6 +46,7 @@ public final class RedPlayerInfo extends BungeePlugin {
 
     @Override
     public void onLoad() {
+        super.onLoad();
         if (getProxy().getPluginManager().getPlugin("BungeeTabListPlus") != null) {
             new AfkPlaceholderVariable(this).register();
         }
