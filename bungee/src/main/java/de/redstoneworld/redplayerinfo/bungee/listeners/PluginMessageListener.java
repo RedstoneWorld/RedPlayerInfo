@@ -49,10 +49,10 @@ public class PluginMessageListener implements Listener {
 
                     ProxiedPlayer player = plugin.getProxy().getPlayer(playerId);
                     if (player == null || player.hasPermission("rwm.redafk.afk-immune")) {
-                        return;
+                        continue;
                     } else if (player.getServer() != event.getSender()) {
                         // ignore messages sent by a server that the player isn't even on
-                        return;
+                        continue;
                     }
                     plugin.logDebug(player.getName() + "/" + player.getUniqueId() + " is afk for " + seconds + " seconds");
 
