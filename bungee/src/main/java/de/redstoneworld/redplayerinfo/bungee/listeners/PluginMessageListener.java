@@ -5,6 +5,7 @@ import com.google.common.io.ByteStreams;
 import de.redstoneworld.redplayerinfo.bungee.RedPlayer;
 import de.redstoneworld.redplayerinfo.bungee.RedPlayerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.connection.Server;
 import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
@@ -50,7 +51,7 @@ public class PluginMessageListener implements Listener {
                     ProxiedPlayer player = plugin.getProxy().getPlayer(playerId);
                     if (player == null || player.hasPermission("rwm.redafk.afk-immune")) {
                         continue;
-                    } else if (player.getServer() != event.getSender()) {
+                    } else if (player.getServer().getInfo() != ((Server) event.getSender()).getInfo()) {
                         // ignore messages sent by a server that the player isn't even on
                         continue;
                     }
