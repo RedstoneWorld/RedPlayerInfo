@@ -6,6 +6,7 @@ import de.redstoneworld.redplayerinfo.bungee.RedPlayer;
 import de.themoep.bungeeplugin.BungeePlugin;
 
 import java.util.Collection;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -27,11 +28,11 @@ public class CachedStorage implements PlayerInfoStorage {
 
     public void savePlayer(RedPlayer player) {
         idCache.put(player.getUniqueId(), player);
-        nameCache.put(player.getName(), player);
+        nameCache.put(player.getName().toLowerCase(Locale.ROOT), player);
     }
 
     public RedPlayer getPlayer(String playerName) {
-        return nameCache.getIfPresent(playerName);
+        return nameCache.getIfPresent(playerName.toLowerCase(Locale.ROOT));
     }
 
     public RedPlayer getPlayer(UUID playerId) {
@@ -51,7 +52,7 @@ public class CachedStorage implements PlayerInfoStorage {
 
     public RedPlayer getPlayer(String playerName, Callable<RedPlayer> nameCacheLoader) {
         try {
-            return nameCache.get(playerName, nameCacheLoader);
+            return nameCache.get(playerName.toLowerCase(Locale.ROOT), nameCacheLoader);
         } catch (ExecutionException e) {
             return null;
         }

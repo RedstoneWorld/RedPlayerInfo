@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.TimeZone;
 import java.util.UUID;
 
@@ -83,7 +84,7 @@ public class RedPlayerInfoCommand extends PluginCommand<RedPlayerInfo> implement
     public Iterable<String> onTabComplete(CommandSender commandSender, String[] args) {
         List<String> playerNames = new ArrayList<>();
         for (ProxiedPlayer player : plugin.getProxy().getPlayers())
-            if (args.length == 0 || args.length == 1 && player.getName().startsWith(args[0]))
+            if (args.length == 0 || args.length == 1 && player.getName().toLowerCase(Locale.ROOT).startsWith(args[0].toLowerCase(Locale.ROOT)))
                 playerNames.add(player.getName());
         return playerNames;
     }
