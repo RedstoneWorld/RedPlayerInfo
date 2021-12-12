@@ -32,54 +32,13 @@ public class MysqlStorage implements PlayerInfoStorage {
         String urlPar = plugin.getConfig().getString("mysql.url-parameters");
 
         ds = new HikariDataSource();
-        String dataSourceClassName = tryDataSourceClassName("org.mariadb.jdbc.MariaDbDataSource");
-        if (dataSourceClassName == null) {
-            dataSourceClassName = tryDataSourceClassName("com.mysql.jdbc.jdbc2.optional.MysqlDataSource");
-        }
-        if (dataSourceClassName != null) {
-            plugin.getLogger().log(Level.INFO, "Using " + dataSourceClassName + " database source");
-            ds.setDataSourceClassName(dataSourceClassName);
-        }
 
-        if (dataSourceClassName == null) {
-            String driverClassName = tryDriverClassName("org.mariadb.jdbc.Driver");
-            if (driverClassName == null) {
-                driverClassName = tryDriverClassName("com.mysql.cj.jdbc.Driver");
-            }
-            if (driverClassName == null) {
-                driverClassName = tryDriverClassName("com.mysql.jdbc.Driver");
-            }
-
-            if (driverClassName != null) {
-                plugin.getLogger().log(Level.INFO, "Using " + driverClassName + " database driver");
-                ds.setDriverClassName(driverClassName);
-            } else {
-                throw new RuntimeException("Could not find database driver or data source class! Plugin wont work without a database!");
-            }
-        }
-
-        ds.addDataSourceProperty("url", "jdbc:mysql://" + host + ":" + port + "/" + database + urlPar);
+        ds.setJdbcUrl("jdbc:mysql://" + host + ":" + port + "/" + database + urlPar);
         ds.setUsername(plugin.getConfig().getString("mysql.user"));
         ds.setPassword(plugin.getConfig().getString("mysql.pass"));
         ds.setConnectionTimeout(5000);
 
         initializeTables();
-    }
-
-    private String tryDriverClassName(String className) {
-        try {
-            Class.forName(className).newInstance();
-            return className;
-        } catch (Exception ignored) {}
-        return null;
-    }
-
-    private String tryDataSourceClassName(String className) {
-        try {
-            Class.forName(className);
-            return className;
-        } catch (Exception ignored) {}
-        return null;
     }
 
     private void initializeTables() throws SQLException {
