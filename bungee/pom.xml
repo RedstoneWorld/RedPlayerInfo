@@ -20,15 +20,15 @@
         </repository>
         <repository>
             <id>minebench-repo</id>
-            <url>http://repo.minebench.de/</url>
+            <url>https://repo.minebench.de/</url>
         </repository>
         <repository>
             <id>codecrafter47-repo</id>
-            <url>http://nexus.codecrafter47.dyndns.eu/content/repositories/public/</url>
+            <url>https://nexus.codecrafter47.dyndns.eu/content/repositories/public/</url>
         </repository>
         <repository>
             <id>bungeeperms-repo</id>
-            <url>http://repo.wea-ondara.net/repository/public/</url>
+            <url>https://repo.wea-ondara.net/repository/public/</url>
         </repository>
         <repository>
             <id>luck-repo</id>
