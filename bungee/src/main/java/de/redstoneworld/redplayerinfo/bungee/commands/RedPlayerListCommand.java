@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -79,11 +80,12 @@ public class RedPlayerListCommand extends PluginCommand<RedPlayerInfo> {
 
     @Override
     public Iterable<String> onTabComplete(CommandSender commandSender, String[] args) {
-        List<String> playerNames = new ArrayList<>();
-        for (ProxiedPlayer player : plugin.getProxy().getPlayers())
-            if (args.length == 0 || args.length == 1 && player.getName().startsWith(args[0]))
-                playerNames.add(player.getName());
-        return playerNames;
+        List<String> serverNames = new ArrayList<>();
+        for (ServerInfo serverInfo : plugin.getProxy().getServers().values())
+            if (args.length == 0 || args.length == 1 && serverInfo.getName().toLowerCase(Locale.ROOT).startsWith(args[0].toLowerCase(Locale.ROOT)))
+                if (serverInfo.canAccess(commandSender))
+                    serverNames.add(serverInfo.getName());
+        return serverNames;
     }
 
 
