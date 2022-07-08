@@ -18,12 +18,10 @@ public class CachedStorage implements PlayerInfoStorage {
     private Cache<String, RedPlayer> nameCache;
 
     public CachedStorage(BungeePlugin plugin) {
-        idCache = CacheBuilder.newBuilder()
-                .maximumSize(plugin.getConfig().getInt("cache-size"))
-                .build();
-        nameCache = CacheBuilder.newBuilder()
-                .maximumSize(plugin.getConfig().getInt("cache-size"))
-                .build();
+        int cacheSize = plugin.getConfig().getInt("cache-size");
+
+        idCache = CacheBuilder.newBuilder().maximumSize(cacheSize).build();
+        nameCache = CacheBuilder.newBuilder().maximumSize(cacheSize).build();
     }
 
     public void savePlayer(RedPlayer player) {
